@@ -1,13 +1,11 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, Platform } from 'react-native';
 
-import { Platform, Dimensions } from 'react-native';
-import { Constants } from 'expo';
+import Footer from './Footer';
 import Item from './Item';
 import Separator from './Separator';
-// import Header from './Header';
-import Footer from './Footer';
 
+// import Header from './Header';
 const isIphone = Platform.OS === 'ios';
 //https://github.com/ptelad/react-native-iphone-x-helper/blob/3c919346769e3cb9315a5254d43fcad1aadee777/index.js#L1-L11
 function isIphoneX() {
@@ -43,31 +41,16 @@ class List extends React.Component {
     } = this.props;
     return (
       <FlatList
-        style={[style, styles.container]}
+        style={style}
         keyExtractor={this.keyExtractor}
         ListFooterComponent={footerProps => (
           <Footer {...footerProps} onPress={onPressFooter} />
         )}
         ItemSeparatorComponent={Separator}
-        contentContainerStyle={{ paddingBottom: isIphoneX() ? 64 : 0 }}
         renderItem={this.renderItem}
         {...props}
       />
     );
   }
 }
-
-// ListHeaderComponent={headerProps => (
-//   <Header
-//     {...headerProps}
-//     buttonTitle={headerButtonTitle}
-//     onPress={onPressHeader}
-//     title={title}
-//   />
-// )}
-
-const styles = StyleSheet.create({
-  container: {},
-});
-
 export default List;

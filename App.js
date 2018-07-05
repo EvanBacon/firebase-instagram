@@ -1,16 +1,15 @@
 // Import the screens
-import FeedScreen from './screens/FeedScreen';
-import SelectPhotoScreen from './screens/SelectPhotoScreen';
-import NewPostScreen from './screens/NewPostScreen';
-
-import tabBarIcon from './components/tabBarIcon';
-
-// Import React Navigation
 import {
   createBottomTabNavigator,
   createStackNavigator,
 } from 'react-navigation';
 
+import tabBarIcon from './components/tabBarIcon';
+import FeedScreen from './screens/FeedScreen';
+import NewPostScreen from './screens/NewPostScreen';
+import SelectPhotoScreen from './screens/SelectPhotoScreen';
+
+// Import React Navigation
 const navigator = createBottomTabNavigator(
   {
     Feed: {

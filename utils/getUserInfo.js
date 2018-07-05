@@ -13,12 +13,8 @@ function getUserInfo() {
   } = Constants;
   return {
     slug: getSlug(),
-    appOwnership,
-    expoVersion,
     deviceId,
     deviceName,
-    deviceYearClass,
-    isDevice,
     platform,
   };
 }

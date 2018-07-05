@@ -1,11 +1,12 @@
+import { ImageManipulator } from 'expo';
+import uuid from 'uuid';
+
+import getSlug from './utils/getSlug';
+import getUserInfo from './utils/getUserInfo';
+
 const firebase = require('firebase');
 // Required for side-effects
 require('firebase/firestore');
-
-import { ImageManipulator } from 'expo';
-import uuid from 'uuid';
-import getUserInfo from './utils/getUserInfo';
-import getSlug from './utils/getSlug';
 
 const collectionName = getSlug();
 
@@ -176,14 +177,6 @@ class Fire {
 
   get collection() {
     return this.db.collection(collectionName);
-  }
-
-  get userDoc() {
-    return this.db.collection('users').doc(this.uid);
-  }
-
-  get doc() {
-    return this.collection.doc(this.uid);
   }
 
   get db() {

@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as React from 'react';
 
 const tabBarIcon = name => ({ tintColor }) => (
   <MaterialIcons

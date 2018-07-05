@@ -1,13 +1,9 @@
+import { Constants, ImagePicker, Permissions } from 'expo';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { Constants } from 'expo';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card } from 'react-native-elements';
 
-// You can import from local files
-// or any pure javascript modules available in npm
-import { Card } from 'react-native-elements'; // Version can be specified in package.json
-import { ImagePicker, Permissions } from 'expo';
-
-export default class App extends Component {
+export default class SelectPhotoScreen extends Component {
   state = {};
 
   _getPermissionAsync = async permission => {
@@ -20,17 +16,23 @@ export default class App extends Component {
   };
 
   _selectPhoto = async () => {
-    // if (this._getPermissionAsync(Permissions.CAMERA_ROLL)) {
-    const result = await ImagePicker.launchImageLibraryAsync();
-    if (!result.cancelled) {
-      this.props.navigation.navigate('NewPost', { image: result.uri });
+    const status = await this._getPermissionAsync(Permissions.CAMERA_ROLL);
+    if (status) {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+      });
+      if (!result.cancelled) {
+        this.props.navigation.navigate('NewPost', { image: result.uri });
+      }
     }
-    // }
   };
 
   _takePhoto = async () => {
-    if (this._getPermissionAsync(Permissions.CAMERA)) {
-      const result = await ImagePicker.launchCameraAsync();
+    const status = await this._getPermissionAsync(Permissions.CAMERA);
+    if (status) {
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+      });
       if (!result.cancelled) {
         this.props.navigation.navigate('NewPost', { image: result.uri });
       }

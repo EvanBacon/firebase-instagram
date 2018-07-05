@@ -1,19 +1,15 @@
+import firebase from 'firebase';
 import React, { Component } from 'react';
 import {
-  Text,
-  RefreshControl,
-  View,
   LayoutAnimation,
+  RefreshControl,
   StyleSheet,
+  View,
 } from 'react-native';
-import { Constants } from 'expo';
-import firebase from 'firebase';
-// You can import from local files
-// or any pure javascript modules available in npm
-import { Card } from 'react-native-elements'; // Version can be specified in package.json
-import Fire from '../Fire';
-import List from '../components/FeedList/List';
+
 import Item from '../components/FeedList/Item';
+import List from '../components/FeedList/List';
+import Fire from '../Fire';
 
 const PAGE_SIZE = 5;
 
@@ -21,19 +17,7 @@ export default class FeedScreen extends Component {
   state = {
     loading: false,
     posts: [],
-    data: {
-      // batman: {
-      //   image:
-      //     'https://firebasestorage.googleapis.com/v0/b/instahamm-b09ce.appspot.com/o/snack-SJucFknGX%2FukGTCRUOxjOeTWR56c1FC1fXDut2%2Fb77a392c-795a-43c7-89a9-ee7173d644fd.jpg?alt=media&token=db55c491-3dc4-4acb-ab8c-ac6674b2c455',
-      //   key: 'FTw4ffeKWT0jeY7Vvf68',
-      //   text: 'Vegans are not cars',
-      //   uid: 'ukGTCRUOxjOeTWR56c1FC1fXDut2',
-      //   name: 'Batman',
-      // },
-    },
-    page: 1,
-    error: null,
-    refreshing: false,
+    data: {},
   };
 
   componentDidMount() {
@@ -123,15 +107,6 @@ export default class FeedScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     backgroundColor: 'white',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
   },
 });
