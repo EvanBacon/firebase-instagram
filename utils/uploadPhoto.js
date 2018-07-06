@@ -12,7 +12,7 @@ function uploadPhoto(uri, uploadUri) {
         unsubscribe();
         rej(err);
       },
-      async uploadedFile => {
+      async () => {
         unsubscribe();
         const url = await ref.getDownloadURL();
         res(url);

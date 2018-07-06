@@ -19,12 +19,12 @@ class Fire {
       projectId: 'instahamm-b09ce',
       storageBucket: 'instahamm-b09ce.appspot.com',
       messagingSenderId: '716190466061',
-    })
+    });
     // Some nonsense...
     firebase.firestore().settings({ timestampsInSnapshots: true });
 
-    // Listen for auth 
-    firebase.auth().onAuthStateChanged(user => {
+    // Listen for auth
+    firebase.auth().onAuthStateChanged(async user => {
       if (!user) {
         await firebase.auth().signInAnonymously();
       }
@@ -43,8 +43,17 @@ class Fire {
       const data = [];
       querySnapshot.forEach(function(doc) {
         if (doc.exists) {
-          const _data = doc.data();
-          const reduced = { key: doc.id, ..._data };
+          const post = doc.data() || {};
+
+          // Reduce the name
+          const user = post.user || {};
+
+          const name = user.deviceName;
+          const reduced = {
+            key: doc.id,
+            name: (name || 'Secret Duck').trim(),
+            ...post,
+          };
           data.push(reduced);
         }
       });
