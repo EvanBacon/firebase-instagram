@@ -1,6 +1,6 @@
 import { Constants, ImagePicker, Permissions } from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Linking, Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
 
 export default class SelectPhotoScreen extends Component {
