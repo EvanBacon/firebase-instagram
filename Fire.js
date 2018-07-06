@@ -1,7 +1,8 @@
-import { ImageManipulator } from 'expo';
 import uuid from 'uuid';
-import uploadPhoto from './utils/uploadPhoto';
+
 import getUserInfo from './utils/getUserInfo';
+import shrinkImageAsync from './utils/shrinkImageAsync';
+import uploadPhoto from './utils/uploadPhoto';
 
 const firebase = require('firebase');
 // Required for side-effects
@@ -11,12 +12,6 @@ const collectionName = 'snack-SJucFknGX';
 
 class Fire {
   constructor() {
-    this.init();
-    firebase.firestore().settings({ timestampsInSnapshots: true });
-    this.observeAuth();
-  }
-
-  init = () =>
     firebase.initializeApp({
       apiKey: 'AIzaSyAQan8_IJ6fY6F8E06FMDKVbWlrdI75mvA',
       authDomain: 'instahamm-b09ce.firebaseapp.com',
@@ -24,17 +19,19 @@ class Fire {
       projectId: 'instahamm-b09ce',
       storageBucket: 'instahamm-b09ce.appspot.com',
       messagingSenderId: '716190466061',
+    })
+    // Some nonsense...
+    firebase.firestore().settings({ timestampsInSnapshots: true });
+
+    // Listen for auth 
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        await firebase.auth().signInAnonymously();
+      }
     });
+  }
 
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
-  onAuthStateChanged = async user => {
-    if (!user) {
-      await firebase.auth().signInAnonymously();
-    }
-  };
-
+  // Download Data
   getPaged = async ({ size, start }) => {
     let ref = this.collection.orderBy('timestamp', 'desc').limit(size);
     try {
@@ -59,12 +56,7 @@ class Fire {
     }
   };
 
-  reduceImage = async uri => {
-    return ImageManipulator.manipulate(uri, [{ resize: { width: 500 } }], {
-      compress: 0.5,
-    });
-  };
-
+  // Upload Data
   uploadPhotoAsync = async uri => {
     const path = `${collectionName}/${this.uid}/${uuid.v4()}.jpg`;
     return uploadPhoto(uri, path);
@@ -72,7 +64,7 @@ class Fire {
 
   post = async ({ text, image: localUri }) => {
     try {
-      const { uri: reducedImage, width, height } = await this.reduceImage(
+      const { uri: reducedImage, width, height } = await shrinkImageAsync(
         localUri,
       );
 
@@ -91,12 +83,9 @@ class Fire {
     }
   };
 
+  // Helpers
   get collection() {
-    return this.db.collection(collectionName);
-  }
-
-  get db() {
-    return firebase.firestore();
+    return firebase.firestore().collection(collectionName);
   }
 
   get uid() {

@@ -1,14 +1,8 @@
 import firebase from 'firebase';
 import React, { Component } from 'react';
-import {
-  LayoutAnimation,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { LayoutAnimation, RefreshControl } from 'react-native';
 
-import Item from '../components/FeedList/Item';
-import List from '../components/FeedList/List';
+import List from '../components/List';
 import Fire from '../Fire';
 
 // Set the default number of images to load for each pagination.
@@ -84,34 +78,20 @@ export default class FeedScreen extends Component {
   // If we press the "Load More..." footer then get the next page of posts
   onPressFooter = () => this.makeRemoteRequest(this.lastKnownKey);
 
-  // Render our posts with the <Item/> component
-  renderItem = ({ item, index }) => <Item index={index} item={item} />;
-
   render() {
     // Let's make everything purrty by calling this method which animates layout changes.
     LayoutAnimation.easeInEaseOut();
     return (
-      <View style={styles.container}>
-        <List
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.loading}
-              onRefresh={this._onRefresh}
-            />
-          }
-          style={{ flex: 1 }}
-          renderItem={this.renderItem}
-          onPressFooter={this.onPressFooter}
-          data={this.state.posts}
-        />
-      </View>
+      <List
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.loading}
+            onRefresh={this._onRefresh}
+          />
+        }
+        onPressFooter={this.onPressFooter}
+        data={this.state.posts}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-});

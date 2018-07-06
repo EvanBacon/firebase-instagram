@@ -1,7 +1,7 @@
 import { Constants, ImagePicker, Permissions } from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, Linking, Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
+import { StyleSheet, Text, View } from 'react-native';
+
 import getPermission from '../utils/getPermission';
 
 const options = {
@@ -34,14 +34,12 @@ export default class SelectPhotoScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Card title="Pick an image first">
-          <Text onPress={this._selectPhoto} style={styles.text}>
-            Select Photo
-          </Text>
-          <Text onPress={this._takePhoto} style={styles.text}>
-            Take Photo
-          </Text>
-        </Card>
+        <Text onPress={this._selectPhoto} style={styles.text}>
+          Select Photo
+        </Text>
+        <Text onPress={this._takePhoto} style={styles.text}>
+          Take Photo
+        </Text>
       </View>
     );
   }
@@ -52,14 +50,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
   },
   text: {
-    margin: 24,
+    padding: 24,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#34495e',
   },
 });

@@ -41,15 +41,20 @@ const navigator = createBottomTabNavigator(
 );
 
 // Create the navigator that pushes high-level screens like the `NewPost` screen.
-const stackNavigator = createStackNavigator({
-  Main: {
-    screen: navigator,
-    // Set the title for our app when the tab bar screen is present
-    navigationOptions: { title: 'Instaham 🐷' },
+const stackNavigator = createStackNavigator(
+  {
+    Main: {
+      screen: navigator,
+      // Set the title for our app when the tab bar screen is present
+      navigationOptions: { title: 'Instaham 🐷' },
+    },
+    // This screen will not have a tab bar
+    NewPost: NewPostScreen,
   },
-  // This screen will not have a tab bar
-  NewPost: NewPostScreen,
-});
+  {
+    cardStyle: { backgroundColor: 'white' },
+  },
+);
 
 // Export it as the root component
 export default stackNavigator;

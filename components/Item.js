@@ -8,15 +8,16 @@ export default class Item extends React.Component {
   state = {};
 
   componentDidMount() {
-    if (!this.props.item.imageWidth) {
-      Image.getSize(this.props.item.image, (width, height) => {
+    if (!this.props.imageWidth) {
+      console.log('getImage', this.props);
+      Image.getSize(this.props.image, (width, height) => {
         this.setState({ width, height });
       });
     }
   }
 
   render() {
-    const { text, user, imageWidth, imageHeight, uid, image } = this.props.item;
+    const { text, user, imageWidth, imageHeight, uid, image } = this.props;
 
     const name = (user || {}).deviceName || 'Secret Duck';
     const imgW = imageWidth || this.state.width;

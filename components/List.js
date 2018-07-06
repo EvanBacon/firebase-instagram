@@ -5,13 +5,12 @@ import Footer from './Footer';
 import Item from './Item';
 
 class List extends React.Component {
-  renderItem = item => <Item item={item} />;
-  keyExtractor = (item, index) => item.key;
+  renderItem = ({ item }) => <Item {...item} />;
+  keyExtractor = item => item.key;
   render() {
     const { onPressFooter, ...props } = this.props;
     return (
       <FlatList
-        style={{ flex: 1 }}
         keyExtractor={this.keyExtractor}
         ListFooterComponent={footerProps => (
           <Footer {...footerProps} onPress={onPressFooter} />
