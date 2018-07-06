@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import firebase from 'firebase';
 import React, { Component } from 'react';
 import {
@@ -13,6 +16,9 @@ import Fire from '../Fire';
 
 const PAGE_SIZE = 5;
 
+/***************************
+ * Export class FeedScreen *
+ **************************/
 export default class FeedScreen extends Component {
   state = {
     loading: false,

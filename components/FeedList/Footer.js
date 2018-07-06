@@ -1,6 +1,12 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight } from 'react-native';
 
+/*****************
+ * Export Footer *
+ ****************/
 export default class Footer extends React.Component {
   onPress = () => {
     this.props.onPress && this.props.onPress();

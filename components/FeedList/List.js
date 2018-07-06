@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import React from 'react';
 import { Dimensions, FlatList, Platform } from 'react-native';
 
@@ -53,4 +56,7 @@ class List extends React.Component {
     );
   }
 }
+/***************
+ * Export List *
+ **************/
 export default List;

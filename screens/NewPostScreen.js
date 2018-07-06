@@ -1,9 +1,16 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, TextInput, View } from 'react-native';
 import HeaderButtons from 'react-navigation-header-buttons';
 
 import Fire from '../Fire';
+
+/******************************
+ * Export class NewPostScreen *
+ *****************************/
 
 export default class NewPostScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
