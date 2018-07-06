@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 
@@ -10,4 +13,7 @@ const tabBarIcon = name => ({ tintColor }) => (
   />
 );
 
+/*********************
+ * Export tabBarIcon *
+ ********************/
 export default tabBarIcon;

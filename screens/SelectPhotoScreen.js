@@ -1,8 +1,14 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { Constants, ImagePicker, Permissions } from 'expo';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
 
+/**********************************
+ * Export class SelectPhotoScreen *
+ *********************************/
 export default class SelectPhotoScreen extends Component {
   state = {};
 

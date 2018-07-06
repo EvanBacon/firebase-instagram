@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { Constants } from 'expo';
 
 function getSlug() {
@@ -6,4 +9,7 @@ function getSlug() {
   } = Constants;
   return slug;
 }
+/**********************
+ * Export getUserInfo *
+ *********************/
 export default getSlug;

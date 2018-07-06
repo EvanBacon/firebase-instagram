@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { ImageManipulator } from 'expo';
 import uuid from 'uuid';
 
@@ -192,4 +195,7 @@ class Fire {
 }
 
 Fire.shared = new Fire();
+/***************
+ * Export Fire *
+ **************/
 export default Fire;

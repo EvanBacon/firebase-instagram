@@ -1,3 +1,6 @@
+/***********************
+ * Module dependencies *
+ ***********************/
 import { Constants } from 'expo';
 import getSlug from './getSlug';
 
@@ -18,4 +21,7 @@ function getUserInfo() {
     platform,
   };
 }
+/**********************
+ * Export getUserInfo *
+ *********************/
 export default getUserInfo;
