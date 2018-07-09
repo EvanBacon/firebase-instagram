@@ -1,16 +1,11 @@
 import firebase from 'firebase';
 import React, { Component } from 'react';
-import {
-  LayoutAnimation,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { LayoutAnimation, RefreshControl } from 'react-native';
 
-import Item from '../components/FeedList/Item';
-import List from '../components/FeedList/List';
+import List from '../components/List';
 import Fire from '../Fire';
 
+// Set the default number of images to load for each pagination.
 const PAGE_SIZE = 5;
 
 export default class FeedScreen extends Component {
@@ -21,9 +16,12 @@ export default class FeedScreen extends Component {
   };
 
   componentDidMount() {
+    // Check if we are signed in...
     if (Fire.shared.uid) {
+      // If we are, then we can get the first 5 posts
       this.makeRemoteRequest();
     } else {
+      // If we aren't then we should just start observing changes. This will be called when the user signs in
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.makeRemoteRequest();
@@ -32,81 +30,68 @@ export default class FeedScreen extends Component {
     }
   }
 
-  addChild = item => {
+  // Append the item to our states `data` prop
+  addPosts = posts => {
     this.setState(previousState => {
       let data = {
         ...previousState.data,
-        [item.key]: item,
+        ...posts,
       };
       return {
         data,
+        // Sort the data by timestamp
         posts: Object.values(data).sort((a, b) => a.timestamp < b.timestamp),
       };
     });
   };
 
+  // Call our database and ask for a subset of the user posts
   makeRemoteRequest = async lastKey => {
-    if (!Fire.shared.uid || this.state.loading) {
-      console.log("FeedScreen: won't update; fetching or not authed...");
-      this.setState({ loading: false });
+    // If we are currently getting posts, then bail out..
+    if (this.state.loading) {
       return;
-    } else {
-      console.log('FeedScreen: will try fetching data...');
     }
-
     this.setState({ loading: true });
 
+    // The data prop will be an array of posts, the cursor will be used for pagination.
     const { data, cursor } = await Fire.shared.getPaged({
       size: PAGE_SIZE,
       start: lastKey,
     });
 
     this.lastKnownKey = cursor;
-    console.log('FeedScreen: Got data', data);
+    // Iteratively add posts
+    let posts = {};
     for (let child of data) {
-      this.addChild(child);
+      posts[child.key] = child;
     }
+    this.addPosts(posts);
+
+    // Finish loading, this will stop the refreshing animation.
     this.setState({ loading: false });
   };
 
-  _onRefresh = () => {
-    this.makeRemoteRequest();
-  };
+  // Because we want to get the most recent items, don't pass the cursor back.
+  // This will make the data base pull the most recent items.
+  _onRefresh = () => this.makeRemoteRequest();
 
-  handleLoadMore = () => {
-    this.makeRemoteRequest(this.lastKnownKey);
-  };
-
-  onPressFooter = () => {
-    this.handleLoadMore();
-  };
-
-  renderItem = ({ item, index }) => <Item index={index} item={item} />;
+  // If we press the "Load More..." footer then get the next page of posts
+  onPressFooter = () => this.makeRemoteRequest(this.lastKnownKey);
 
   render() {
+    // Let's make everything purrty by calling this method which animates layout changes.
     LayoutAnimation.easeInEaseOut();
     return (
-      <View style={styles.container}>
-        <List
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.loading}
-              onRefresh={this._onRefresh}
-            />
-          }
-          style={{ flex: 1 }}
-          renderItem={this.renderItem}
-          onPressFooter={this.onPressFooter}
-          data={this.state.posts}
-        />
-      </View>
+      <List
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.loading}
+            onRefresh={this._onRefresh}
+          />
+        }
+        onPressFooter={this.onPressFooter}
+        data={this.state.posts}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-});
