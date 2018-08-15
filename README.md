@@ -8,10 +8,12 @@ Tutorial: https://blog.expo.io/instagram-clone-using-firebase-react-native-expo-
 
 Download with: 
 
-```sh git clone https://github.com/EvanBacon/firebase-instagram.git && cd firebase-instagram
+```sh 
+git clone https://github.com/EvanBacon/firebase-instagram.git && cd firebase-instagram
 ```
 
 Run with:
 
-```sh exp start
+```sh 
+exp start
 ```
