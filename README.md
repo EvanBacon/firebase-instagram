@@ -21,5 +21,5 @@ yarn
 Run with:
 
 ```sh 
-exp start
+expo start
 ```
