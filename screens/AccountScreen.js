@@ -1,9 +1,12 @@
+import firebase from 'firebase';
+import Fire from '../Fire';
 import React from 'react';
 import { View, Button, AsyncStorage } from 'react-native';
 
 export default class AccountScreen extends React.Component {
 
     _signOutAsync = async () => {
+        Fire.shared.signOut();
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     };
