@@ -25,3 +25,29 @@ Run with:
 ```sh 
 exp start
 ```
+
+## Setup Firebase
+
+##### Step 1: Create blank config file in project root.
+
+```sh
+touch ./config.js
+```
+
+##### Step 2: Copy this into your config.
+
+```javascript
+const config = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
+};
+
+export default config;
+```
+
+##### Step 3: Copy Firebase Config over blank config.
