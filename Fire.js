@@ -36,6 +36,15 @@ class Fire {
     });
   }
 
+  createUser = ({email, password}) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
+  }
+
   // Download Data
   getPaged = async ({ size, start }) => {
     let ref = this.collection.orderBy('timestamp', 'desc').limit(size);
