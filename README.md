@@ -14,6 +14,12 @@ Download with:
 git clone https://github.com/freddiemixell/firebase-instagram.git && cd firebase-instagram
 ```
 
+Update Expo CLI
+
+```sh
+npm install -g expo-cli
+```
+
 Install Libs:
 
 ```sh 
