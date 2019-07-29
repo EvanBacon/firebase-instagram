@@ -23,7 +23,7 @@ yarn
 Run with:
 
 ```sh 
-expo start
+yarn start
 ```
 
 ## Setup Firebase
