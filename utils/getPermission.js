@@ -1,4 +1,4 @@
-import { Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
 import { Linking } from 'react-native';
 
 export default async function getPermission(permission) {

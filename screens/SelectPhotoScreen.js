@@ -1,4 +1,5 @@
-import { Constants, ImagePicker, Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
