@@ -18,7 +18,7 @@
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
-    "react-navigation": "^2.6.0",
+    "react-navigation": "3.10.1",
     "react-navigation-header-buttons": "^1.2.1",
     "uuid": "3.3.2"
   }
