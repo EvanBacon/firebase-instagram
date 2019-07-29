@@ -14,12 +14,25 @@ const collectionName = 'snack-SJucFknGX';
 class Fire {
   constructor() {
     firebase.initializeApp(config);
+  }
 
-    // Listen for auth
-    firebase.auth().onAuthStateChanged(async user => {
-      if (!user) {
-        await firebase.auth().signInAnonymously();
-      }
+  signIn = async ({ email, password }) => {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch(function(error) {
+      // Handle Errors here.
+      // Maybe log these with sentri
+      // var errorCode = error.code;
+      // var errorMessage = error.message;
+      // ...
+      return false
+    });
+  }
+
+  signOut = () => {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
     });
   }
 
