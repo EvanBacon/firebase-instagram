@@ -30,8 +30,6 @@ export default class SignupScreen extends React.Component {
         return (
             <View>
                 <Text>Sign Up</Text>
-                <Text>{this.state.isEmailValid ? 'Email Valid' : 'Email Invalid'}</Text>
-                <Text>{this.state.isPassValid ? 'Password Valid' : 'Password Invalid'}</Text>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
