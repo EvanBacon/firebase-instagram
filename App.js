@@ -2,6 +2,8 @@
 import {
   createBottomTabNavigator,
   createStackNavigator,
+  createSwitchNavigator,
+  createAppContainer
 } from 'react-navigation';
 
 import tabBarIcon from './utils/tabBarIcon';
@@ -9,6 +11,9 @@ import tabBarIcon from './utils/tabBarIcon';
 import FeedScreen from './screens/FeedScreen';
 import NewPostScreen from './screens/NewPostScreen';
 import SelectPhotoScreen from './screens/SelectPhotoScreen';
+import AuthLoadingScreen from './screens/AuthLoadingScreen';
+import SignInScreen from './screens/SignInScreen';
+import AccountScreen from './screens/AccountScreen';
 
 // Create our main tab navigator for moving between the Feed and Photo screens
 const navigator = createBottomTabNavigator(
@@ -29,6 +34,12 @@ const navigator = createBottomTabNavigator(
         tabBarIcon: tabBarIcon('add-circle'),
       },
     },
+    Account: {
+      screen: AccountScreen,
+      navigationOptions: {
+        tabBarIcon: tabBarIcon('perm-identity')
+      }
+    },
   },
   {
     // We want to hide the labels and set a nice 2-tone tint system for our tabs
@@ -41,7 +52,7 @@ const navigator = createBottomTabNavigator(
 );
 
 // Create the navigator that pushes high-level screens like the `NewPost` screen.
-const stackNavigator = createStackNavigator(
+const AppStack = createStackNavigator(
   {
     Main: {
       screen: navigator,
@@ -56,5 +67,22 @@ const stackNavigator = createStackNavigator(
   },
 );
 
+const AuthStack = createStackNavigator(
+  {
+    SignIn: SignInScreen,
+  }
+);
+
+const AppContainer = createAppContainer(createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+));
+
 // Export it as the root component
-export default stackNavigator;
+export default AppContainer;
