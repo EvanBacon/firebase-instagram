@@ -1,3 +1,5 @@
+import Fire from '../Fire';
+
 import React from 'react';
 import {
     View,
@@ -65,11 +67,15 @@ export default class SignupScreen extends React.Component {
         const {
             email,
             password,
+            isEmailValid,
+            isPassValid,
         } = this.state;
 
-        if ( ! password || ! email ) {
+        if ( ! password || ! email || ! isEmailValid || ! isPassValid ) {
             return;
         }
+
+        return Fire.shared.createUser({email, password });
 
     }
 
