@@ -20,13 +20,6 @@ export default class FeedScreen extends Component {
     if (Fire.shared.uid) {
       // If we are, then we can get the first 5 posts
       this.makeRemoteRequest();
-    } else {
-      // If we aren't then we should just start observing changes. This will be called when the user signs in
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.makeRemoteRequest();
-        }
-      });
     }
   }
 
