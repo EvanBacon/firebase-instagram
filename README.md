@@ -26,7 +26,7 @@ Install Libs:
 yarn
 ```
 
-Run with:
+Run with: (Setup Firebase First)
 
 ```sh 
 yarn start
