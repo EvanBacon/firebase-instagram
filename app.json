@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "instagram",
-    "description": "Photo Sharing",
-    "slug": "instagram",
+    "name": "Finsta",
+    "description": "Photo Sharing app with no rules.",
+    "slug": "finsta",
     "privacy": "unlisted",
     "sdkVersion": "33.0.0",
     "version": "1.0.0",
@@ -27,6 +27,7 @@
     "platforms": [
       "android",
       "ios"
-    ]
+    ],
+    "githubUrl": "https://github.com/freddiemixell/firebase-instagram"
   }
 }
