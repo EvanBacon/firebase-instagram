@@ -13,6 +13,7 @@ import NewPostScreen from './screens/NewPostScreen';
 import SelectPhotoScreen from './screens/SelectPhotoScreen';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import SignInScreen from './screens/SignInScreen';
+import SignupScreen from './screens/SignupScreen';
 import AccountScreen from './screens/AccountScreen';
 
 // Create our main tab navigator for moving between the Feed and Photo screens
@@ -70,6 +71,7 @@ const AppStack = createStackNavigator(
 const AuthStack = createStackNavigator(
   {
     SignIn: SignInScreen,
+    SignUp: SignupScreen,
   }
 );
 

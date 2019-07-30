@@ -33,8 +33,6 @@ export default class SignInScreen extends React.Component {
       title: 'Please sign in',
     };
     
-    
-
     componentDidMount() {
         const { authListener } = this.state;
         authListener();
@@ -69,6 +67,10 @@ export default class SignInScreen extends React.Component {
                 />
             <Button title="Sign in!" onPress={this._signInAsync} />
             { error ? <Text style={{textAlign:'center'}}>Email or Password Incorrect</Text> : null }
+            <Button
+                title='Sign Up'
+                onPress={() => this.props.navigation.navigate('SignUp')}
+            />
             </View>
         );
     }
