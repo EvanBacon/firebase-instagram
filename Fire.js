@@ -36,12 +36,51 @@ class Fire {
     });
   }
 
-  createUser = ({email, password}) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
+  createUser = ({
+    email,
+    password,
+    firstName = '',
+    lastName = '',
+    username = '',
+  }) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(({user}) => {
+      // Get user id in callback store in database
+      const userID = user.uid;
+      // Store users meta data
+      const userData = {
+        email,
+        firstName,
+        lastName,
+        username,
+        following: [],
+        followers: [],
+        posts: [],
+        profilePictureUrl: "",
+        activityStatus: true,
+        accountPrivate: false,
+        mutedAccounts: [],
+        blockedUsers: [],
+        blockComments: [],
+        allowTags: true,
+        searchHistory: [],
+        blockAllNotifications: false,
+        allowPostNotifications: false,
+        allowCommentNotifications: false,
+        allowFollowerNotifications: false,
+        allowDirectMessageNotifications: false,
+        allowEmailNotifications: true,
+        allowTextMessageNotifications: true,
+        requestedVerification: false,
+      }
+
+      this.userCollection.doc(userID).set(userData);
+
+      this.activityCollection.doc(userID).set({ posts: [] });
+
+    })
+    .catch(function({ message }) {
+      console.log(message);
     });
   }
 
@@ -109,6 +148,14 @@ class Fire {
   // Helpers
   get collection() {
     return firebase.firestore().collection(collectionName);
+  }
+
+  get userCollection() {
+    return firebase.firestore().collection('users');
+  }
+
+  get activityCollection() {
+    return firebase.firestore().collection('activity');
   }
 
   get uid() {
