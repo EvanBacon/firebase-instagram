@@ -33,8 +33,6 @@ export default class SignInScreen extends React.Component {
       title: 'Please sign in',
     };
     
-    
-
     componentDidMount() {
         const { authListener } = this.state;
         authListener();
