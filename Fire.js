@@ -31,8 +31,8 @@ class Fire {
   signOut = () => {
     firebase.auth().signOut().then(function() {
       // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
+    }).catch(function({ message }) {
+      console.log(message);
     });
   }
 
@@ -55,7 +55,6 @@ class Fire {
         username,
         following: [],
         followers: [],
-        posts: [],
         profilePictureUrl: "",
         activityStatus: true,
         accountPrivate: false,
@@ -77,6 +76,8 @@ class Fire {
       this.userCollection.doc(userID).set(userData);
 
       this.activityCollection.doc(userID).set({ posts: [] });
+
+      this.postsCollection.doc(userID).set({ posts: [] });
 
     })
     .catch(function({ message }) {
@@ -156,6 +157,10 @@ class Fire {
 
   get activityCollection() {
     return firebase.firestore().collection('activity');
+  }
+
+  get postsCollection() {
+    return firebase.firestore().collection('posts');
   }
 
   get uid() {
