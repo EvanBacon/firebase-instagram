@@ -15,6 +15,8 @@ export default class SignupScreen extends React.Component {
         password: '',
         isEmailValid: false,
         email: '',
+        isUsernameValid: true,
+        username: '',
         signupError: ''
     };
 
@@ -22,6 +24,8 @@ export default class SignupScreen extends React.Component {
         const {
             email,
             password,
+            username,
+            isUsernameValid,
             signupError
         } = this.state;
 
@@ -33,7 +37,7 @@ export default class SignupScreen extends React.Component {
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
-                    textContentType='username'
+                    textContentType='emailAddress'
                     keyboardType='email-address'
                     onChangeText={this._handleEmailInput}
                     value={email}
@@ -48,6 +52,14 @@ export default class SignupScreen extends React.Component {
                     value={password}
                     style={inputStyle}
                     autoCapitalize='none'
+                />
+                <TextInput
+                    placeholder='Username'
+                    textContentType='username'
+                    onChangeText={this._handleUsernameInput}
+                    value={username}
+                    autoCapitalize='none'
+                    style={isUsernameValid ?  inputStyle : [ inputStyle, { borderColor: 'red' }]}
                 />
                 <Button
                     title='Add User'
@@ -65,15 +77,31 @@ export default class SignupScreen extends React.Component {
         const {
             email,
             password,
+            username,
             isEmailValid,
             isPassValid,
+            isUsernameValid,
         } = this.state;
 
-        if ( ! password || ! email || ! isEmailValid || ! isPassValid ) {
+        if ( ! password || ! email || ! username || ! isEmailValid || ! isPassValid || ! isUsernameValid ) {
             return;
         }
 
-        return Fire.shared.createUser({email, password });
+        // Checking to make sure the username doesn't exist.
+        const checkUsername = await Fire.shared.checkIfUsernameExists( this.state.username );
+
+        if ( typeof checkUsername !== 'undefined' ) {
+            return this.setState({ isUsernameValid: false, signupError: 'Username already exists' });
+        }
+
+        let checkErrors = await Fire.shared.createUser({email, password, username });
+
+        // If we have a signup error let em know.
+        if ( typeof checkErrors !== 'undefined' ) {
+            return this.setState({ signupError: checkErrors });
+        }
+
+        return;
 
     }
 
@@ -125,9 +153,7 @@ export default class SignupScreen extends React.Component {
             return this.setState({isPassValid: false, signupError: 'Password must contain at least 1 special character.'});
         }
 
-        if (numbers !== null && uppers !== null && lowers !== null && special !== null) {
-            return this.setState({isPassValid: true, signupError: ''});
-        }
+        return this.setState({isPassValid: true, signupError: ''});
 
     }
 
@@ -162,5 +188,23 @@ export default class SignupScreen extends React.Component {
         score += (variationCount - 1) * 10;
 
         return this.setState({passwordScore: parseInt(score, 10)});
+    }
+
+    /**
+     * Handle Username Input
+     */
+    _handleUsernameInput = username => {
+        this.setState({ username });
+    }
+
+    _validUsername = async () => {
+        if (this.state.username) {
+            const checkUsername = await Fire.shared.checkIfUsernameExists( this.state.username );
+            // No User with that username found.
+            if ( typeof checkUsername === 'undefined' ) {
+                return this.setState( { isUsernameValid: true, signupError: '' } );
+            }
+            this.setState( { isUsernameValid: false, signupError: 'Username already exists.' } );
+        }
     }
 }

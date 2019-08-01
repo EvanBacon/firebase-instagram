@@ -36,15 +36,16 @@ class Fire {
     });
   }
 
-  createUser = ({
+  createUser = async ({
     email,
     password,
     firstName = '',
     lastName = '',
     username = '',
   }) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(({user}) => {
+
       // Get user id in callback store in database
       const userID = user.uid;
       // Store users meta data
@@ -80,9 +81,34 @@ class Fire {
       this.postsCollection.doc(userID).set({ posts: [] });
 
     })
-    .catch(function({ message }) {
+    .catch(function({ code, message }) {
+      if ( code === 'auth/email-already-in-use') {
+        return message;
+      }
       console.log(message);
     });
+
+  }
+
+  checkIfUsernameExists = async username => {
+    let ref = this.userCollection.where( 'username', '==', username )
+    let checkUser;
+      try {
+        const querySnapshot = await ref.get();
+        
+        querySnapshot.forEach(doc => {
+          if ( doc.exists ) {
+            checkUser = true;
+          } else {
+            checkUser = false;
+          }
+        });
+
+        return checkUser;
+
+      } catch({ message }) {
+        console.log(message);
+      }
   }
 
   // Download Data
