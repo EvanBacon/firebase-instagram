@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component {
 
         const logoStyle = { textAlign: 'center', fontSize: 50, marginBottom: 30 }
 
-        const loginStyle = { backgroundColor: '#185CC6', padding: 10, width: '80%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
+        const loginStyle = { backgroundColor: '#185CC6', padding: 10, width: '90%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
 
         const accountStyle = { marginTop: 30 }
 
