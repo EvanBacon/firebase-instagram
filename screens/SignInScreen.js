@@ -3,12 +3,12 @@ import Fire from '../Fire';
 import React from 'react';
 import {
     View,
+    ScrollView,
     Button,
     TextInput,
     AsyncStorage,
     Text
 } from 'react-native';
-import Constants from 'expo-constants';
 
 export default class SignInScreen extends React.Component {
     constructor(props) {
@@ -49,23 +49,22 @@ export default class SignInScreen extends React.Component {
 
         const pageStyle = { marginTop: 100, height: '100%' }
 
-        const inputStyle = { padding: 10, width: '80%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
+        const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
 
         const logoStyle = { textAlign: 'center', fontSize: 30, marginBottom: 30 }
 
-        const errorMsgStyle = { textAlign: 'center', fontSize: 16, marginTop: 30, color: 'red' }
+        const errorMsgStyle = { textAlign: 'center', fontSize: 16, marginTop: 30, color: '#FC4118', fontWeight: '400' }
 
-        const signinStyle = { backgroundColor: '#185CC6', padding: 10, width: '80%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
+        const signinStyle = { backgroundColor: '#185CC6', padding: 10, width: '90%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
 
         const { error, email, password } = this.state;
 
         return (
-            <View style={ pageStyle }>
-                <Text
-                    style={ logoStyle }
-                >
-                    Finsta 🔥
-                </Text>
+            <ScrollView
+                contentContainerStyle={pageStyle}
+                keyboardShouldPersistTaps='handled'
+            >
+                <Text style={ logoStyle }>Finsta 🔥</Text>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
@@ -75,6 +74,7 @@ export default class SignInScreen extends React.Component {
                     value={ email }
                     style={ inputStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
                 <TextInput
                     placeholder='Password'
@@ -84,12 +84,13 @@ export default class SignInScreen extends React.Component {
                     value={ password }
                     style={ inputStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
                 <View
                     style={ signinStyle }
                 >
                     <Button
-                        title="Sign in"
+                        title='Sign in'
                         onPress={ this._signInAsync }
                         color='#f5f5f5'
                     />
@@ -98,23 +99,23 @@ export default class SignInScreen extends React.Component {
                     ? <Text style={ errorMsgStyle }>Email or Password Incorrect</Text>
                     : null
                 }
-            </View>
+            </ScrollView>
         );
     }
 
-    _handleEmailInput = email => this.setState({email});
+    _handleEmailInput = email => this.setState({ email });
 
-    _handlePasswordInput = password => this.setState({password});
+    _handlePasswordInput = password => this.setState({ password });
   
     _signInAsync = async () => {
         const { email, password } = this.state;
-            await Fire.shared.signIn({email, password})
-                .then(data => {
-                    if ( ! data.user ) {
-                        return this.setState({error: true});
-                    } else {
-                        return this.setState({error: false});
-                    }
-                });
+        const { signIn } = Fire.shared;
+        const { user } = await signIn({ email, password });
+
+        if ( ! user ) {
+            return this.setState({error: true});
+        } else {
+            return this.setState({error: false});
+        }
     };
   }
