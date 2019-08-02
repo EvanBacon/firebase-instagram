@@ -8,36 +8,54 @@ import {
     Button,
 } from 'react-native';
 
+import Constants from 'expo-constants';
+
 export default class SignupScreen extends React.Component {
+
+    static navigationOptions = {
+        title: 'Sign Up',
+      };
+
     state = {
-        isPassValid: false,
+        isPassValid: true,
         passwordScore: 0,
         password: '',
-        isEmailValid: false,
+        isEmailValid: true,
         email: '',
-        signupError: ''
+        isUsernameValid: true,
+        username: '',
+        signupError: '',
+        loading: false,
     };
 
     render() {
         const {
             email,
             password,
-            signupError
+            username,
+            isUsernameValid,
+            isEmailValid,
+            isPassValid,
+            signupError,
+            loading
         } = this.state;
 
-        const inputStyle = {height: 40, borderColor: 'gray', borderWidth: 1};
+        const inputStyle = { height: 40, borderColor: 'gray', borderWidth: 1 };
+
+        const errorStyle = { height: 40, borderColor: 'red', borderWidth: 1 };
+
+        const pageStyle = { justifyContent: 'center', height: '100%' };
 
         return (
-            <View>
-                <Text>Sign Up</Text>
+            <View style={pageStyle} >
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
-                    textContentType='username'
+                    textContentType='emailAddress'
                     keyboardType='email-address'
                     onChangeText={this._handleEmailInput}
                     value={email}
-                    style={inputStyle}
+                    style={ isEmailValid ? inputStyle : errorStyle }
                     autoCapitalize='none'
                 />
                 <TextInput
@@ -46,14 +64,31 @@ export default class SignupScreen extends React.Component {
                     secureTextEntry={true}
                     onChangeText={this._handlePasswordInput}
                     value={password}
-                    style={inputStyle}
+                    style={ isPassValid ? inputStyle : errorStyle }
                     autoCapitalize='none'
                 />
+                <TextInput
+                    placeholder='Username'
+                    textContentType='username'
+                    onChangeText={this._handleUsernameInput}
+                    value={username}
+                    autoCapitalize='none'
+                    style={isUsernameValid ?  inputStyle : errorStyle }
+                />
                 <Button
-                    title='Add User'
+                    title='Sign up! 🔥'
                     onPress={this._handleAddUser}
+                    disabled={ loading }
                 />
                 { signupError ? <Text>{ signupError }</Text> : null }
+                {
+                    signupError === 'Email already in use.'
+                        ? <Button
+                            title='Sign In'
+                            onPress={() => this.props.navigation.goBack() }
+                            />
+                        : null
+                }
             </View>
         );
     }
@@ -65,15 +100,67 @@ export default class SignupScreen extends React.Component {
         const {
             email,
             password,
-            isEmailValid,
-            isPassValid,
+            username,
+            signupError,
         } = this.state;
 
-        if ( ! password || ! email || ! isEmailValid || ! isPassValid ) {
+        this.setState({ loading: true });
+
+        // Check if emails not valid and handle biz.
+        if ( ! email ) {
+            return this.setState({ signupError: 'Enter email address.', isEmailValid: false, loading: false });
+        }
+
+        const checkEmail = await this._emailValidator( email );
+
+        if ( ! checkEmail.isEmailValid ) {
+            return this.setState({ signupError: 'Email format should be youremail@example.com.', isEmailValid: false, loading: false });
+        } else {
+            this.setState({ isEmailValid: true, signupError: '' });
+        }
+        
+        // Check password.
+        if ( ! password ) {
+            return this.setState({ signupError: 'Enter password.', isPassValid: false, isEmailValid: true, loading: false });
+        }
+
+        const checkPass = await this._passwordValidator( password );
+
+        if ( ! checkPass.isPassValid ) {
+            return this.setState({ signupError: checkPass.signupError, isPassValid: false, loading: false });
+        } else {
+            this.setState({ signupError: '', isPassValid: true, loading: false });
+        }
+
+        // Checking to make sure the username doesn't exist.
+        // Will return true if username exists.
+        if ( ! username ) {
+            return this.setState({ signupError: 'Enter username.', isUsernameValid: false, isEmailValid: true, isPassValid: true, loading: false });
+        }
+
+        const checkUsernameReq = await Fire.shared.checkIfUsernameExists( this.state.username );
+
+        if ( checkUsernameReq ) {
+            return this.setState({ signupError: 'Username already exists', isUsernameValid: false, loading: false });
+        } else {
+            this.setState({ signupError: '', isUsernameValid: true });
+        }
+
+        if ( ! password || ! email || ! username || signupError ) {
             return;
         }
 
-        return Fire.shared.createUser({email, password });
+        let createUserReq = await Fire.shared.createUser({email, password, username });
+
+        // If we have a signup error let em know.
+        if ( typeof createUserReq !== 'undefined' && createUserReq.status === 'error' ) {
+            if ( createUserReq.code === 'auth/email-already-in-use' ) {
+                return this.setState({ signupError: 'Email already in use.', isEmailValid: false, loading: false, });
+            }
+            return this.setState({ signupError: createUserReq.message, loading: false });
+        }
+
+        return;
 
     }
 
@@ -81,23 +168,27 @@ export default class SignupScreen extends React.Component {
      * Add Email to State and validate while typing
      */
     _handleEmailInput = email => {
-        this.setState( { email, signupError: '' }, () => this._emailValidator( this.state.email ) );
+        this.setState( { email, signupError: '' } );
     };
 
     /**
      * Validate Email Format
      */
-    _emailValidator = email => {
+    _emailValidator = async email => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const check = re.test(String(email).toLowerCase());
-        this.setState({isEmailValid: check});
+
+        if ( ! check ) {
+            return { isEmailValid: false };
+        }
+        return { isEmailValid: check };
     }
 
     /**
      * Add Password to State while typing
      */
     _handlePasswordInput = password => {
-        this.setState( { password, signupError: '' }, () => this._passwordValidator( this.state.password ) );
+        this.setState( { password, signupError: '' } );
     }
 
     /**
@@ -108,26 +199,47 @@ export default class SignupScreen extends React.Component {
         const uppers  = password.match(/[A-Z]/);
         const lowers  = password.match(/[a-z]/);
         const special = password.match(/[!@#$%\^&*\+]/);
+        const length  = password.match(/^.{8,}$/);
 
         if ( null === numbers ) {
-            return this.setState({isPassValid: false, signupError: 'Password must contain at least 1 number.'});
+            return {
+                isPassValid: false,
+                signupError: 'Password must contain at least 1 number.',
+            };
         }
 
         if ( null === uppers ) {
-            return this.setState({isPassValid: false, signupError: 'Password must contain at least 1 upppercase character.'});
+            return {
+                isPassValid: false,
+                signupError: 'Password must contain at least 1 upppercase character.'
+            };
         }
 
         if ( null === lowers ) {
-            return this.setState({isPassValid: false, signupError: 'Password must contain at least 1 lowercase character.'});
+            return {
+                isPassValid: false,
+                signupError: 'Password must contain at least 1 lowercase character.'
+            };
         }
 
         if ( null === special ) {
-            return this.setState({isPassValid: false, signupError: 'Password must contain at least 1 special character.'});
+            return {
+                isPassValid: false,
+                signupError: 'Password must contain at least 1 special character.'
+            };
         }
 
-        if (numbers !== null && uppers !== null && lowers !== null && special !== null) {
-            return this.setState({isPassValid: true, signupError: ''});
+        if ( null === length ) {
+            return {
+                isPassValid: false,
+                signupError: 'Password must be 8 characters or longer.'
+            }
         }
+
+        return {
+            isPassValid: true,
+            signupError: ''
+        };
 
     }
 
@@ -162,5 +274,23 @@ export default class SignupScreen extends React.Component {
         score += (variationCount - 1) * 10;
 
         return this.setState({passwordScore: parseInt(score, 10)});
+    }
+
+    /**
+     * Handle Username Input
+     */
+    _handleUsernameInput = username => {
+        this.setState({ username, signupError: '' });
+    }
+
+    _validUsername = async () => {
+        if (this.state.username) {
+            const checkUsername = await Fire.shared.checkIfUsernameExists( this.state.username );
+            // No User with that username found.
+            if ( checkUsername.status !== 'error' && ! checkUsername ) {
+                return this.setState( { isUsernameValid: true, signupError: '' } );
+            }
+            this.setState( { isUsernameValid: false, signupError: 'Username already exists.' } );
+        }
     }
 }

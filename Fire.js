@@ -31,20 +31,21 @@ class Fire {
   signOut = () => {
     firebase.auth().signOut().then(function() {
       // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
+    }).catch(function({ message }) {
+      console.log(message);
     });
   }
 
-  createUser = ({
+  createUser = async ({
     email,
     password,
     firstName = '',
     lastName = '',
     username = '',
   }) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(({user}) => {
+
       // Get user id in callback store in database
       const userID = user.uid;
       // Store users meta data
@@ -55,7 +56,6 @@ class Fire {
         username,
         following: [],
         followers: [],
-        posts: [],
         profilePictureUrl: "",
         activityStatus: true,
         accountPrivate: false,
@@ -78,10 +78,32 @@ class Fire {
 
       this.activityCollection.doc(userID).set({ posts: [] });
 
+      this.postsCollection.doc(userID).set({ posts: [] });
+
     })
-    .catch(function({ message }) {
-      console.log(message);
+    .catch(function({ message, code }) {
+      return { status: 'error', message, code };
     });
+
+  }
+
+  checkIfUsernameExists = async username => {
+    let ref = this.userCollection.where( 'username', '==', username )
+      try {
+        const querySnapshot = await ref.get();
+        // No matches found.
+        if ( querySnapshot.empty ) {
+          return false;
+        }
+        // User found with username
+        return true;
+  
+      } catch({ message }) {
+        return {
+          status: 'error',
+          message: message,
+        }
+      }
   }
 
   // Download Data
@@ -146,6 +168,10 @@ class Fire {
   };
 
   // Helpers
+  get loggedIn() {
+    return firebase.auth().currentUser ? true : false;
+  }
+
   get collection() {
     return firebase.firestore().collection(collectionName);
   }
@@ -156,6 +182,10 @@ class Fire {
 
   get activityCollection() {
     return firebase.firestore().collection('activity');
+  }
+
+  get postsCollection() {
+    return firebase.firestore().collection('posts');
   }
 
   get uid() {
