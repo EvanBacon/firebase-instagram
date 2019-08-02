@@ -3,6 +3,7 @@ import Fire from '../Fire';
 import React from 'react';
 import {
     View,
+    ScrollView,
     Button,
     TextInput,
     AsyncStorage,
@@ -30,8 +31,10 @@ export default class SignInScreen extends React.Component {
     }
 
     static navigationOptions = {
-      title: 'Sign In',
-    };
+        headerStyle: {
+            borderBottomWidth: 0,
+        }
+    }
     
     componentDidMount() {
         const { authListener } = this.state;
@@ -43,51 +46,76 @@ export default class SignInScreen extends React.Component {
     }
 
     render() {
-        const { error } = this.state;
+
+        const pageStyle = { marginTop: 100, height: '100%' }
+
+        const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
+
+        const logoStyle = { textAlign: 'center', fontSize: 30, marginBottom: 30 }
+
+        const errorMsgStyle = { textAlign: 'center', fontSize: 16, marginTop: 30, color: '#FC4118', fontWeight: '400' }
+
+        const signinStyle = { backgroundColor: '#185CC6', padding: 10, width: '90%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
+
+        const { error, email, password } = this.state;
+
         return (
-            <View style={{justifyContent: 'center', height: '100%'}}>
+            <ScrollView
+                contentContainerStyle={pageStyle}
+                keyboardShouldPersistTaps='handled'
+            >
+                <Text style={ logoStyle }>Finsta 🔥</Text>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
-                    textContentType='username'
+                    textContentType='emailAddress'
                     keyboardType='email-address'
-                    onChangeText={this._handleEmailInput}
-                    value={this.state.email}
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    onChangeText={ this._handleEmailInput }
+                    value={ email }
+                    style={ inputStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
                 <TextInput
                     placeholder='Password'
                     textContentType='password'
-                    secureTextEntry={true}
-                    onChangeText={this._handlePasswordInput}
-                    value={this.state.password}
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    secureTextEntry={ true }
+                    onChangeText={ this._handlePasswordInput }
+                    value={ password }
+                    style={ inputStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
-            <Button title="Sign in" onPress={this._signInAsync} />
-            { error ? <Text style={{textAlign:'center'}}>Email or Password Incorrect</Text> : null }
-            <Button
-                title='Sign Up'
-                onPress={() => this.props.navigation.navigate('SignUp')}
-            />
-            </View>
+                <View
+                    style={ signinStyle }
+                >
+                    <Button
+                        title='Sign in'
+                        onPress={ this._signInAsync }
+                        color='#f5f5f5'
+                    />
+                </View>
+                { error 
+                    ? <Text style={ errorMsgStyle }>Email or Password Incorrect</Text>
+                    : null
+                }
+            </ScrollView>
         );
     }
 
-    _handleEmailInput = email => this.setState({email});
+    _handleEmailInput = email => this.setState({ email });
 
-    _handlePasswordInput = password => this.setState({password});
+    _handlePasswordInput = password => this.setState({ password });
   
     _signInAsync = async () => {
         const { email, password } = this.state;
-            await Fire.shared.signIn({email, password})
-                .then(data => {
-                    if ( ! data.user ) {
-                        return this.setState({error: true});
-                    } else {
-                        return this.setState({error: false});
-                    }
-                });
+        const { signIn } = Fire.shared;
+        const { user } = await signIn({ email, password });
+
+        if ( ! user ) {
+            return this.setState({error: true});
+        } else {
+            return this.setState({error: false});
+        }
     };
   }

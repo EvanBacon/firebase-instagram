@@ -6,15 +6,16 @@ import {
     Text,
     TextInput,
     Button,
+    ScrollView
 } from 'react-native';
-
-import Constants from 'expo-constants';
 
 export default class SignupScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Sign Up',
-      };
+        headerStyle: {
+            borderBottomWidth: 0,
+        }
+    }
 
     state = {
         isPassValid: true,
@@ -40,14 +41,26 @@ export default class SignupScreen extends React.Component {
             loading
         } = this.state;
 
-        const inputStyle = { height: 40, borderColor: 'gray', borderWidth: 1 };
+        const pageStyle = { marginTop: 100, flexGrow: 1 }
 
-        const errorStyle = { height: 40, borderColor: 'red', borderWidth: 1 };
+        const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
 
-        const pageStyle = { justifyContent: 'center', height: '100%' };
+        const errorStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: '#FC4118', borderWidth: 1 };
+
+        const signupStyle = { backgroundColor: '#185CC6', padding: 10, width: '90%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
+
+        const headerStyle = { textAlign: 'center', fontSize: 30, marginBottom: 30 }
+
+        const errorMsgStyle = { textAlign: 'center', fontSize: 16, marginTop: 30, color: '#FC4118', fontWeight: '400' }
 
         return (
-            <View style={pageStyle} >
+            <ScrollView
+                contentContainerStyle={pageStyle}
+                keyboardShouldPersistTaps='handled'
+            >
+                <Text style={ headerStyle } >
+                    Join In!
+                </Text>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
@@ -57,6 +70,7 @@ export default class SignupScreen extends React.Component {
                     value={email}
                     style={ isEmailValid ? inputStyle : errorStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
                 <TextInput
                     placeholder='Password'
@@ -66,6 +80,7 @@ export default class SignupScreen extends React.Component {
                     value={password}
                     style={ isPassValid ? inputStyle : errorStyle }
                     autoCapitalize='none'
+                    returnKeyType='done'
                 />
                 <TextInput
                     placeholder='Username'
@@ -74,13 +89,19 @@ export default class SignupScreen extends React.Component {
                     value={username}
                     autoCapitalize='none'
                     style={isUsernameValid ?  inputStyle : errorStyle }
+                    returnKeyType='done'
                 />
-                <Button
-                    title='Sign up! 🔥'
-                    onPress={this._handleAddUser}
-                    disabled={ loading }
-                />
-                { signupError ? <Text>{ signupError }</Text> : null }
+                <View
+                    style={ signupStyle }
+                >
+                    <Button
+                        title='Sign up! 🔥'
+                        onPress={this._handleAddUser}
+                        color='#f5f5f5'
+                        disabled={ loading }
+                    />
+                </View>
+                { signupError ? <Text style={ errorMsgStyle }>{ signupError }</Text> : null }
                 {
                     signupError === 'Email already in use.'
                         ? <Button
@@ -89,7 +110,7 @@ export default class SignupScreen extends React.Component {
                             />
                         : null
                 }
-            </View>
+            </ScrollView>
         );
     }
 
@@ -168,7 +189,7 @@ export default class SignupScreen extends React.Component {
      * Add Email to State and validate while typing
      */
     _handleEmailInput = email => {
-        this.setState( { email, signupError: '' } );
+        this.setState( { email, signupError: '', isEmailValid: true } );
     };
 
     /**
@@ -188,7 +209,7 @@ export default class SignupScreen extends React.Component {
      * Add Password to State while typing
      */
     _handlePasswordInput = password => {
-        this.setState( { password, signupError: '' } );
+        this.setState( { password, signupError: '', isPassValid: true } );
     }
 
     /**
@@ -280,7 +301,7 @@ export default class SignupScreen extends React.Component {
      * Handle Username Input
      */
     _handleUsernameInput = username => {
-        this.setState({ username, signupError: '' });
+        this.setState({ username, signupError: '', isUsernameValid: true });
     }
 
     _validUsername = async () => {
