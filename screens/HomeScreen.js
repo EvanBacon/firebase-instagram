@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import Fire from '../Fire';
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, AsyncStorage } from 'react-native';
 
 /**
  * Home Screen
@@ -12,6 +12,31 @@ export default class HomeScreen extends React.Component {
 
     static navigationOptions = {
         header: null
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            authListener: () => {
+                firebase.auth().onAuthStateChanged(async user => {
+                    if (user) {
+                        // Do logged in stuff
+                        await AsyncStorage.setItem('userToken', Fire.shared.uid);
+                        this.props.navigation.navigate('App');
+                    }
+                });
+            }
+        }
+    }
+
+    componentDidMount() {
+        const { authListener } = this.state;
+        authListener();
+    }
+
+    componentWillUnmount() {
+        this.setState({ authListener: null });
     }
 
     render() {
