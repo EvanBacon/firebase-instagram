@@ -30,7 +30,7 @@ export default class SignInScreen extends React.Component {
     }
 
     static navigationOptions = {
-      title: 'Please sign in',
+      title: 'Sign In',
     };
     
     componentDidMount() {
@@ -45,7 +45,7 @@ export default class SignInScreen extends React.Component {
     render() {
         const { error } = this.state;
         return (
-            <View>
+            <View style={{justifyContent: 'center', height: '100%'}}>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
@@ -65,7 +65,7 @@ export default class SignInScreen extends React.Component {
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     autoCapitalize='none'
                 />
-            <Button title="Sign in!" onPress={this._signInAsync} />
+            <Button title="Sign in" onPress={this._signInAsync} />
             { error ? <Text style={{textAlign:'center'}}>Email or Password Incorrect</Text> : null }
             <Button
                 title='Sign Up'
