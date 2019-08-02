@@ -8,6 +8,7 @@ import {
     AsyncStorage,
     Text
 } from 'react-native';
+import Constants from 'expo-constants';
 
 export default class SignInScreen extends React.Component {
     constructor(props) {
@@ -30,8 +31,10 @@ export default class SignInScreen extends React.Component {
     }
 
     static navigationOptions = {
-      title: 'Sign In',
-    };
+        headerStyle: {
+            borderBottomWidth: 0,
+        }
+    }
     
     componentDidMount() {
         const { authListener } = this.state;
@@ -43,34 +46,58 @@ export default class SignInScreen extends React.Component {
     }
 
     render() {
-        const { error } = this.state;
+
+        const pageStyle = { marginTop: 100, height: '100%' }
+
+        const inputStyle = { padding: 10, width: '80%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
+
+        const logoStyle = { textAlign: 'center', fontSize: 30, marginBottom: 30 }
+
+        const errorMsgStyle = { textAlign: 'center', fontSize: 16, marginTop: 30, color: 'red' }
+
+        const signinStyle = { backgroundColor: '#185CC6', padding: 10, width: '80%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
+
+        const { error, email, password } = this.state;
+
         return (
-            <View style={{justifyContent: 'center', height: '100%'}}>
+            <View style={ pageStyle }>
+                <Text
+                    style={ logoStyle }
+                >
+                    Finsta 🔥
+                </Text>
                 <TextInput
                     placeholder='Email'
                     autoCompleteType='email'
-                    textContentType='username'
+                    textContentType='emailAddress'
                     keyboardType='email-address'
-                    onChangeText={this._handleEmailInput}
-                    value={this.state.email}
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    onChangeText={ this._handleEmailInput }
+                    value={ email }
+                    style={ inputStyle }
                     autoCapitalize='none'
                 />
                 <TextInput
                     placeholder='Password'
                     textContentType='password'
-                    secureTextEntry={true}
-                    onChangeText={this._handlePasswordInput}
-                    value={this.state.password}
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    secureTextEntry={ true }
+                    onChangeText={ this._handlePasswordInput }
+                    value={ password }
+                    style={ inputStyle }
                     autoCapitalize='none'
                 />
-            <Button title="Sign in" onPress={this._signInAsync} />
-            { error ? <Text style={{textAlign:'center'}}>Email or Password Incorrect</Text> : null }
-            <Button
-                title='Sign Up'
-                onPress={() => this.props.navigation.navigate('SignUp')}
-            />
+                <View
+                    style={ signinStyle }
+                >
+                    <Button
+                        title="Sign in"
+                        onPress={ this._signInAsync }
+                        color='#f5f5f5'
+                    />
+                </View>
+                { error 
+                    ? <Text style={ errorMsgStyle }>Email or Password Incorrect</Text>
+                    : null
+                }
             </View>
         );
     }
