@@ -81,33 +81,28 @@ class Fire {
       this.postsCollection.doc(userID).set({ posts: [] });
 
     })
-    .catch(function({ code, message }) {
-      if ( code === 'auth/email-already-in-use') {
-        return message;
-      }
-      console.log(message);
+    .catch(function({ message, code }) {
+      return { status: 'error', message, code };
     });
 
   }
 
   checkIfUsernameExists = async username => {
     let ref = this.userCollection.where( 'username', '==', username )
-    let checkUser;
       try {
         const querySnapshot = await ref.get();
-        
-        querySnapshot.forEach(doc => {
-          if ( doc.exists ) {
-            checkUser = true;
-          } else {
-            checkUser = false;
-          }
-        });
-
-        return checkUser;
-
+        // No matches found.
+        if ( querySnapshot.empty ) {
+          return false;
+        }
+        // User found with username
+        return true;
+  
       } catch({ message }) {
-        console.log(message);
+        return {
+          status: 'error',
+          message: message,
+        }
       }
   }
 
@@ -173,6 +168,10 @@ class Fire {
   };
 
   // Helpers
+  get loggedIn() {
+    return firebase.auth().currentUser ? true : false;
+  }
+
   get collection() {
     return firebase.firestore().collection(collectionName);
   }
