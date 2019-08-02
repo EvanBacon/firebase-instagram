@@ -18,11 +18,11 @@ export default class HomeScreen extends React.Component {
 
         const pageStyle = { height: '100%', justifyContent: 'center' }
 
-        const logoStyle = {}
+        const logoStyle = { textAlign: 'center', fontSize: 50, marginBottom: 30 }
 
-        const loginStyle = {}
+        const loginStyle = { backgroundColor: '#185CC6', padding: 10, width: '80%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
 
-        const accountStyle = {}
+        const accountStyle = { marginTop: 30 }
 
         return (
             <View
@@ -33,16 +33,23 @@ export default class HomeScreen extends React.Component {
                 >
                     Finsta 🔥
                 </Text>
-                <Button
-                    title='Login'
+                <View
                     style={ loginStyle }
-                    onPress={() => this.props.navigation.navigate('SignIn')}
-                />
-                <Button
-                    title='Create Account'
+                >
+                    <Button
+                        title='Login'
+                        onPress={() => this.props.navigation.navigate('SignIn')}
+                        color='#f5f5f5'
+                    />
+                </View>
+                <View
                     style={ accountStyle }
-                    onPress={() => this.props.navigation.navigate('SignUp')}
-                />
+                >
+                    <Button
+                        title='Create Account'
+                        onPress={() => this.props.navigation.navigate('SignUp')}
+                    />
+                </View>
             </View>
         )
     }
