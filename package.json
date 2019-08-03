@@ -1,8 +1,8 @@
 {
-  "name": "firebase-basic-instagram",
-  "version": "0.0.0",
-  "description": "No description",
-  "author": null,
+  "name": "finsta",
+  "version": "0.3.0",
+  "description": "Photo sharing without rules",
+  "author": "Freddie Mixell",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
