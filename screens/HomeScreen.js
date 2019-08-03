@@ -1,7 +1,8 @@
 import firebase from 'firebase';
 import Fire from '../Fire';
 import React from 'react';
-import { Modal, View, Button, Text, AsyncStorage, TextInput, Alert } from 'react-native';
+import { View, Button, Text, AsyncStorage } from 'react-native';
+import PasswordResetModal from '../components/PasswordResetModal';
 
 /**
  * Home Screen
@@ -30,6 +31,9 @@ export default class HomeScreen extends React.Component {
             modalVisible: false,
             resetEmail: '',
         }
+
+        this.setModalVisible = this.setModalVisible.bind(this);
+        this.setResetEmail = this.setResetEmail.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +49,10 @@ export default class HomeScreen extends React.Component {
         this.setState({ modalVisible: visible });
     }
 
+    setResetEmail = resetEmail => {
+        return this.setState({ resetEmail });
+    }
+
     render() {
 
         const pageStyle = { flexGrow: 1, justifyContent: 'center' }
@@ -58,74 +66,50 @@ export default class HomeScreen extends React.Component {
         const accountStyle = { marginTop: 30 }
 
         return (
-            <View
-                style={ pageStyle }
-            >
-                <Text
-                    style={ logoStyle }
-                >
-                    Finsta 🔥
-                </Text>
+            <>
                 <View
-                    style={ loginStyle }
+                    style={ pageStyle }
                 >
-                    <Button
-                        title='Login'
-                        onPress={() => this.props.navigation.navigate('SignIn')}
-                        color='#f5f5f5'
-                    />
+                    <Text
+                        style={ logoStyle }
+                    >
+                        Finsta 🔥
+                    </Text>
+                    <View
+                        style={ loginStyle }
+                    >
+                        <Button
+                            title='Login'
+                            onPress={() => this.props.navigation.navigate('SignIn')}
+                            color='#f5f5f5'
+                        />
+                    </View>
+                    <View
+                        style={ accountStyle }
+                    >
+                        <Button
+                            title='Create Account'
+                            onPress={() => this.props.navigation.navigate('SignUp')}
+                        />
+                    </View>
+                    <View style={{width: '100%'}}>
+                        <PasswordResetModal
+                            modalVisible={this.state.modalVisible}
+                            toggle={this.setModalVisible}
+                            reset={this.setResetEmail}
+                            resetEmail={this.state.resetEmail}
+                            inputStyle={inputStyle}
+                        />
+                    </View>
                 </View>
-                <View
-                    style={ accountStyle }
-                >
-                    <Button
-                        title='Create Account'
-                        onPress={() => this.props.navigation.navigate('SignUp')}
-                    />
-                </View>
-                <View style={{width: '100%'}}>
+                <View style={{marginBottom: 70}}>
                     <Button
                         title='Forgot Password'
+                        style={{flexGrow: 1, justifyContent: 'flex-end'}}
                         onPress={() => this.setModalVisible(!this.state.modalVisible)}
                     />
-                    <Modal
-                        animationType="slide"
-                        transparent={false}
-                        visible={this.state.modalVisible}
-                        style={{width: '100%'}}
-                        onRequestClose={() => this.setState({modalVisible: false})}>
-                        <View
-						 	style={{position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, justifyContent: 'center'}}
-						>
-							<Text style={{textAlign: 'center', marginBottom: 10, fontSize: 18}}>Reset Password</Text>
-							<TextInput
-								placeholder="Email Address"
-								onChangeText={resetEmail => {
-									this.setState({resetEmail});
-								}}
-                                value={this.state.resetEmail}
-                                style={inputStyle}
-                                autoCapitalize='none'
-                                returnKeyType='done'
-							/>
-							<Button
-                                title="Reset Password"
-                                onPress={ async () => {
-                                    const res = await Fire.shared.resetPasswordHandler( this.state.resetEmail );
-
-                                    if ( res ) {
-                                        Alert.alert('Password Reset Fam.');
-                                    }
-                                }}
-							/>
-							<Button
-								title="Cancel"
-								onPress={() => this.setState({modalVisible: false})}
-							/>
-						</View>
-                    </Modal>
                 </View>
-            </View>
+            </>
         )
     }
 }
