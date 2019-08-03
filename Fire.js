@@ -16,15 +16,33 @@ class Fire {
     firebase.initializeApp(config);
   }
 
+  resetPasswordHandler = async email => {
+		const auth = firebase.auth();
+
+		if ( null === email || 'undefined' === typeof email || ! email ) {
+			Alert.alert('Enter Email');
+			return;
+		}
+
+		auth
+			.sendPasswordResetEmail(email)
+			.then(function() {
+			Alert.alert( 'Reset link sent!' );
+			})
+			.catch(function() {
+			Alert.alert('Please try again, sorry.');
+			});
+	  }
+
   signIn = async ({ email, password }) => {
     return firebase.auth().signInWithEmailAndPassword(email, password)
-    .catch(function(error) {
+    .catch(function() {
       // Handle Errors here.
       // Maybe log these with sentri
       // var errorCode = error.code;
       // var errorMessage = error.message;
       // ...
-      return false
+      return false;
     });
   }
 
@@ -166,6 +184,7 @@ class Fire {
       alert(message);
     }
   };
+
 
   // Helpers
   get loggedIn() {
