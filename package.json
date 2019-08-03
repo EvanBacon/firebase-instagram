@@ -9,7 +9,7 @@
     "start": "expo start"
   },
   "dependencies": {
-    "expo": "^33.0.0",
+    "expo": "^34.0.0",
     "expo-constants": "^6.0.0",
     "expo-image-manipulator": "^6.0.0",
     "expo-image-picker": "^6.0.0",
@@ -17,9 +17,18 @@
     "firebase": "^5.2.0",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native-gesture-handler": "^1.3.0",
     "react-navigation": "3.10.1",
     "react-navigation-header-buttons": "^1.2.1",
+    "react-native-screens": "^1.0.0-alpha.23",
     "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@firebase/app-types": "^0.4.3",
+    "@firebase/util": "^0.2.24",
+    "@types/markerclustererplus": "^2.1.33",
+    "@types/react": "^16.8.24"
   }
 }

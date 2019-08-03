@@ -4,7 +4,7 @@
     "description": "Photo Sharing app with no rules.",
     "slug": "finsta",
     "privacy": "unlisted",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "34.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
