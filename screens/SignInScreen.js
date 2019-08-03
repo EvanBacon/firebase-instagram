@@ -7,7 +7,7 @@ import {
     Button,
     TextInput,
     AsyncStorage,
-    Text
+    Text,
 } from 'react-native';
 
 export default class SignInScreen extends React.Component {
@@ -47,7 +47,7 @@ export default class SignInScreen extends React.Component {
 
     render() {
 
-        const pageStyle = { marginTop: 100, height: '100%' }
+        const pageStyle = { marginTop: 100, flexGrow: 1 }
 
         const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
 
