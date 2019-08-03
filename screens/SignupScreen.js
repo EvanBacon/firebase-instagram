@@ -42,7 +42,7 @@ export default class SignupScreen extends React.Component {
             loading
         } = this.state;
 
-        const pageStyle = { marginTop: 80, flexGrow: 1 }
+        const pageStyle = { flexGrow: 1 }
 
         const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
 
