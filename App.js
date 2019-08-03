@@ -59,7 +59,7 @@ const AppStack = createStackNavigator(
     Main: {
       screen: navigator,
       // Set the title for our app when the tab bar screen is present
-      navigationOptions: { title: 'Finsta 🔥' },
+      navigationOptions: { title: 'Finsta 🔥', headerStyle: { borderBottomWidth: 0 } },
     },
     // This screen will not have a tab bar
     NewPost: NewPostScreen,
