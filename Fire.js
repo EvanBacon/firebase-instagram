@@ -24,13 +24,13 @@ class Fire {
 			return;
 		}
 
-		auth
+		return auth
 			.sendPasswordResetEmail(email)
 			.then(function() {
-			Alert.alert( 'Reset link sent!' );
+        return true;
 			})
 			.catch(function() {
-			Alert.alert('Please try again, sorry.');
+			  return false;
 			});
 	  }
 
