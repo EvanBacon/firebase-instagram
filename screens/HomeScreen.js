@@ -61,8 +61,6 @@ export default class HomeScreen extends React.Component {
 
         const loginStyle = { backgroundColor: '#185CC6', padding: 10, width: '90%', marginRight: 'auto', marginLeft: 'auto', borderRadius: 6 }
 
-        const inputStyle = { padding: 10, width: '90%', height: 50, marginBottom: 10, marginRight: 'auto', marginLeft: 'auto', borderRadius: 6, borderColor: 'gray', borderWidth: 1 }
-
         const accountStyle = { marginTop: 30 }
 
         return (
@@ -98,7 +96,6 @@ export default class HomeScreen extends React.Component {
                             toggle={this.setModalVisible}
                             reset={this.setResetEmail}
                             resetEmail={this.state.resetEmail}
-                            inputStyle={inputStyle}
                         />
                     </View>
                 </View>
