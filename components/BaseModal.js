@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, Button, Text, StyleSheet } from 'react-native';
-import { string, bool, func, any } from 'prop-types';
+import { string, bool, func, any, object } from 'prop-types';
 
 const style = StyleSheet.create({
     containerStyle: { position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, justifyContent: 'center' },
@@ -8,11 +8,13 @@ const style = StyleSheet.create({
     modalStyle: { width: '100%' },
 });
 
-export default function BaseModal( props ) {
+function BaseModal( props ) {
 
     const {
         title,
         closeBtnText,
+        openBtnText,
+        openBtnStyle,
         modalVisible,
         children,
         transparent,
@@ -31,12 +33,13 @@ export default function BaseModal( props ) {
         : null;
 
     return (
+        <>
         <Modal
             animationType={ animationType }
             transparent={ transparent }
             visible={ modalVisible }
             style={ modalStyle }
-            onRequestClose={ () => toggle( ! modalVisible ) }
+            onRequestClose={ () => toggle() }
         >
             <View
                 style={ containerStyle }
@@ -45,10 +48,17 @@ export default function BaseModal( props ) {
                 { children }
                 <Button
                     title={ closeBtnText ? closeBtnText : 'Close' }
-                    onPress={ () => toggle( ! modalVisible ) }
+                    onPress={ () => toggle() }
                 />
             </View>
         </Modal>
+        <View style={ openBtnStyle }>
+            <Button
+                title={ openBtnText }
+                onPress={ () => toggle() }
+            />
+        </View>
+        </>
     );
 }
 
@@ -56,6 +66,8 @@ BaseModal.propTypes = {
     modalVisible: bool.isRequired,
     toggle: func.isRequired,
     children: any,
+    openBtnText: string,
+    openBtnStyle: object,
     closeBtnText: string,
     title: string,
     transparent: bool,
@@ -64,8 +76,12 @@ BaseModal.propTypes = {
 
 BaseModal.defaultProps = {
     children: null,
+    openBtnText: 'Open',
+    openBtnStyle: {},
     closeBtnText: 'Close',
     title: '',
     transparent: false,
     animationType: 'slide',
 }
+
+export default React.memo(BaseModal);
