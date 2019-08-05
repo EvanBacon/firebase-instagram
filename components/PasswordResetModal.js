@@ -1,72 +1,86 @@
-import Fire from '../Fire';
 import React from 'react';
-import { Button, TextInput, Alert, StyleSheet } from 'react-native';
-import { bool, func, string } from 'prop-types';
+import {
+  Button, TextInput, Alert, StyleSheet,
+} from 'react-native';
+import {
+  bool, func, string, object,
+} from 'prop-types';
+import Fire from '../Fire';
 import BaseModal from './BaseModal';
 
 const style = StyleSheet.create({
-    inputStyle: {
-        padding: 10,
-        width: '90%',
-        height: 50,
-        marginBottom: 10,
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        borderRadius: 6,
-        borderColor: 'gray',
-        borderWidth: 1
-    }
+  inputStyle: {
+    padding: 10,
+    width: '90%',
+    height: 50,
+    marginBottom: 10,
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    borderRadius: 6,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
 });
 
-function PasswordResetModal( props ) {
+function PasswordResetModal(props) {
+  const {
+    modalVisible,
+    toggle,
+    reset,
+    resetEmail,
+    handleReset,
+    openBtnStyle,
+  } = props;
 
-    const {
-        modalVisible,
-        toggle,
-        reset,
-        resetEmail,
-    } = props;
+  const { inputStyle } = style;
 
-    const {
-        inputStyle
-    } = style;
-
-    return (
-        <BaseModal
-            modalVisible={ modalVisible }
-            transparent={ false }
-            animationType="slide"
-            toggle={ toggle }
-            title='Password Reset'
-            closeBtnText='Close'
-        >
-            <TextInput
-                placeholder="Email Address"
-                onChangeText={ resetEmail => reset( resetEmail ) }
-                value={ resetEmail }
-                style={ inputStyle }
-                autoCapitalize='none'
-                returnKeyType='done'
-            />
-            <Button
-                title="Reset Password"
-                onPress={ async () => {
-                    const res = await Fire.shared.resetPasswordHandler( resetEmail );
-
-                    if ( res ) {
-                        Alert.alert('Password Reset Fam.');
-                    }
-                }}
-            />
-        </BaseModal>
-    );
+  return (
+    <BaseModal
+      modalVisible={modalVisible}
+      transparent={false}
+      animationType="slide"
+      toggle={toggle}
+      title="Password Reset"
+      closeBtnText="Close"
+      openBtnText="Forgot Password"
+      openBtnStyle={openBtnStyle}
+    >
+      <TextInput
+        placeholder="Email Address"
+        onChangeText={input => reset(input)}
+        value={resetEmail}
+        style={inputStyle}
+        autoCapitalize="none"
+        returnKeyType="done"
+      />
+      <Button
+        title="Reset Password"
+        onPress={async () => {
+          const res = await handleReset(resetEmail);
+ 
+          if (res) {
+            Alert.alert('Password Reset Fam.');
+          } else {
+            Alert.alert('Enter Valid Email');
+          }
+        }}
+      />
+    </BaseModal>
+  );
 }
 
 PasswordResetModal.propTypes = {
-    modalVisible: bool,
-    toggle: func,
-    reset: func,
-    resetEmail: string,
-}
+  modalVisible: bool.isRequired,
+  toggle: func.isRequired,
+  reset: func.isRequired,
+  resetEmail: string.isRequired,
+  handleReset: func,
+  openBtnStyle: object,
+};
+
+PasswordResetModal.defaultProps = {
+  handleReset: Fire.resetPasswordHandler,
+  openBtnStyle: {},
+};
 
 export default PasswordResetModal;
