@@ -15,7 +15,7 @@ import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignupScreen from './screens/SignupScreen';
 import AccountScreen from './screens/AccountScreen';
-import HomeScreen from './screens/HomeScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 // Create our main tab navigator for moving between the Feed and Photo screens
 const navigator = createBottomTabNavigator(
@@ -40,7 +40,7 @@ const navigator = createBottomTabNavigator(
       screen: AccountScreen,
       navigationOptions: {
         tabBarIcon: tabBarIcon('perm-identity')
-      }
+      },
     },
   },
   {
@@ -71,10 +71,10 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   {
-    HomeScreen: HomeScreen,
+    Home: WelcomeScreen,
     SignIn: SignInScreen,
     SignUp: SignupScreen,
-  }
+  },
 );
 
 const AppContainer = createAppContainer(createSwitchNavigator(
@@ -85,7 +85,7 @@ const AppContainer = createAppContainer(createSwitchNavigator(
   },
   {
     initialRouteName: 'AuthLoading',
-  }
+  },
 ));
 
 // Export it as the root component
