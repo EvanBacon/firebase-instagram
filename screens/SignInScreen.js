@@ -22,7 +22,7 @@ export default class SignInScreen extends React.Component {
                 firebase.auth().onAuthStateChanged(async user => {
                     if (user) {
                         // Do logged in stuff
-                        await AsyncStorage.setItem('userToken', Fire.shared.uid);
+                        await AsyncStorage.setItem('userToken', Fire.uid);
                         this.props.navigation.navigate('App');
                     }
                 });
@@ -109,7 +109,7 @@ export default class SignInScreen extends React.Component {
   
     _signInAsync = async () => {
         const { email, password } = this.state;
-        const { signIn } = Fire.shared;
+        const { signIn } = Fire;
         const { user } = await signIn({ email, password });
 
         if ( ! user ) {

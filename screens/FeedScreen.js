@@ -17,7 +17,7 @@ export default class FeedScreen extends Component {
 
   componentDidMount() {
     // Check if we are signed in...
-    if (Fire.shared.uid) {
+    if (Fire.uid) {
       // If we are, then we can get the first 5 posts
       this.makeRemoteRequest();
     }
@@ -47,7 +47,7 @@ export default class FeedScreen extends Component {
     this.setState({ loading: true });
 
     // The data prop will be an array of posts, the cursor will be used for pagination.
-    const { data, cursor } = await Fire.shared.getPaged({
+    const { data, cursor } = await Fire.getPaged({
       size: PAGE_SIZE,
       start: lastKey,
     });

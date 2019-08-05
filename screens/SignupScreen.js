@@ -198,7 +198,7 @@ export default class SignupScreen extends React.Component {
             this.setState({ signupError: [ ...this.state.signupError ,'Enter username.' ], isUsernameValid: false });
         }
 
-        const checkUsernameReq = await Fire.shared.checkIfUsernameExists( this.state.username );
+        const checkUsernameReq = await Fire.checkIfUsernameExists( this.state.username );
 
         if ( checkUsernameReq ) {
             errorDetector = true;
@@ -211,7 +211,7 @@ export default class SignupScreen extends React.Component {
             return this.setState({loading: false});
         }
 
-        let createUserReq = await Fire.shared.createUser({email, password, username });
+        let createUserReq = await Fire.createUser({email, password, username });
 
         // If we have a signup error let em know.
         if ( typeof createUserReq !== 'undefined' && createUserReq.status === 'error' ) {
@@ -367,7 +367,7 @@ export default class SignupScreen extends React.Component {
 
     _validUsername = async () => {
         if (this.state.username) {
-            const checkUsername = await Fire.shared.checkIfUsernameExists( this.state.username );
+            const checkUsername = await Fire.checkIfUsernameExists( this.state.username );
             // No User with that username found.
             if ( checkUsername.status !== 'error' && ! checkUsername ) {
                 return this.setState( { isUsernameValid: true, signupError: [] } );

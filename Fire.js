@@ -11,7 +11,7 @@ require('firebase/firestore');
 
 const collectionName = 'snack-SJucFknGX';
 
-class Fire {
+class FireStarter {
   constructor() {
     firebase.initializeApp(config);
   }
@@ -20,8 +20,7 @@ class Fire {
 		const auth = firebase.auth();
 
 		if ( null === email || 'undefined' === typeof email || ! email ) {
-			Alert.alert('Enter Email');
-			return;
+			return false;
 		}
 
 		return auth
@@ -215,5 +214,6 @@ class Fire {
   }
 }
 
-Fire.shared = new Fire();
+const Fire = new FireStarter();
+
 export default Fire;
