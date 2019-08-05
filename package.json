@@ -9,7 +9,7 @@
     "start": "expo start"
   },
   "dependencies": {
-    "expo": "^34.0.0",
+    "expo": "34.0.1",
     "expo-constants": "^6.0.0",
     "expo-image-manipulator": "^6.0.0",
     "expo-image-picker": "^6.0.0",
@@ -20,7 +20,7 @@
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-gesture-handler": "^1.3.0",
-    "react-native-screens": "^1.0.0-alpha.23",
+    "react-native-screens": "1.0.0-alpha.22",
     "react-navigation": "3.10.1",
     "react-navigation-header-buttons": "^1.2.1",
     "@babel/core": "^7.5.5",
