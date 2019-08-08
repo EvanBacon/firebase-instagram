@@ -1,9 +1,8 @@
-import firebase from 'firebase';
 import React, { Component } from 'react';
 import { LayoutAnimation, RefreshControl } from 'react-native';
 
 import List from '../components/List';
-import Fire from '../Fire';
+import { Brain } from '../Crainium';
 
 // Set the default number of images to load for each pagination.
 const PAGE_SIZE = 5;
@@ -17,16 +16,16 @@ export default class FeedScreen extends Component {
 
   componentDidMount() {
     // Check if we are signed in...
-    if (Fire.uid) {
+    if (Brain.uid) {
       // If we are, then we can get the first 5 posts
       this.makeRemoteRequest();
     }
   }
 
   // Append the item to our states `data` prop
-  addPosts = posts => {
-    this.setState(previousState => {
-      let data = {
+  addPosts = (posts) => {
+    this.setState((previousState) => {
+      const data = {
         ...previousState.data,
         ...posts,
       };
@@ -39,23 +38,25 @@ export default class FeedScreen extends Component {
   };
 
   // Call our database and ask for a subset of the user posts
-  makeRemoteRequest = async lastKey => {
+  makeRemoteRequest = async (lastKey) => {
+    const { loading } = this.state;
     // If we are currently getting posts, then bail out..
-    if (this.state.loading) {
+    if (loading) {
       return;
     }
     this.setState({ loading: true });
 
     // The data prop will be an array of posts, the cursor will be used for pagination.
-    const { data, cursor } = await Fire.getPaged({
+    const { data, cursor } = await Brain.getPaged({
       size: PAGE_SIZE,
       start: lastKey,
     });
 
     this.lastKnownKey = cursor;
     // Iteratively add posts
-    let posts = {};
-    for (let child of data) {
+    const posts = {};
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of data) {
       posts[child.key] = child;
     }
     this.addPosts(posts);
@@ -66,24 +67,25 @@ export default class FeedScreen extends Component {
 
   // Because we want to get the most recent items, don't pass the cursor back.
   // This will make the data base pull the most recent items.
-  _onRefresh = () => this.makeRemoteRequest();
+  onRefresh = () => this.makeRemoteRequest();
 
   // If we press the "Load More..." footer then get the next page of posts
   onPressFooter = () => this.makeRemoteRequest(this.lastKnownKey);
 
   render() {
+    const { loading, posts } = this.state;
     // Let's make everything purrty by calling this method which animates layout changes.
     LayoutAnimation.easeInEaseOut();
     return (
       <List
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.loading}
-            onRefresh={this._onRefresh}
-          />
-        }
         onPressFooter={this.onPressFooter}
-        data={this.state.posts}
+        data={posts}
+        refreshControl={(
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={this.onRefresh}
+          />
+        )}
       />
     );
   }

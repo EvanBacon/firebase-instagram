@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Image, StyleSheet, Text, View,
+} from 'react-native';
 
 const profileImageSize = 36;
 const padding = 12;
@@ -18,7 +20,9 @@ export default class Item extends React.Component {
   }
 
   render() {
-    const { text, name, imageWidth, imageHeight, uid, image } = this.props;
+    const {
+      text, name, imageWidth, imageHeight, uid, image,
+    } = this.props;
 
     // Reduce the name to something
     const imgW = imageWidth || this.state.width;
@@ -62,7 +66,7 @@ const Header = ({ name, image }) => (
 );
 
 const Icon = ({ name }) => (
-  <Ionicons style={{ marginRight: 8 }} name={name} size={26} color="black" />
+  <Ionicons style={ styles.icon } name={name} size={26} color="black" />
 );
 
 const IconBar = () => (
@@ -78,6 +82,7 @@ const IconBar = () => (
 
 const styles = StyleSheet.create({
   text: { fontWeight: '600' },
+  icon: { marginRight: 8 },
   subtitle: {
     opacity: 0.8,
   },

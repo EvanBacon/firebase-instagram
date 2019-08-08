@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+
 function uploadPhoto(uri, uploadUri) {
   return new Promise(async (res, rej) => {
     const response = await fetch(uri);
@@ -7,8 +8,8 @@ function uploadPhoto(uri, uploadUri) {
     const ref = firebase.storage().ref(uploadUri);
     const unsubscribe = ref.put(blob).on(
       'state_changed',
-      state => {},
-      err => {
+      () => {},
+      (err) => {
         unsubscribe();
         rej(err);
       },

@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  createAppContainer
+  createAppContainer,
 } from 'react-navigation';
 
 import tabBarIcon from './utils/tabBarIcon';
@@ -39,7 +39,7 @@ const navigator = createBottomTabNavigator(
     Account: {
       screen: AccountScreen,
       navigationOptions: {
-        tabBarIcon: tabBarIcon('perm-identity')
+        tabBarIcon: tabBarIcon('perm-identity'),
       },
     },
   },
