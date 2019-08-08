@@ -5,7 +5,7 @@ import {
 import {
   bool, func, string, object,
 } from 'prop-types';
-import Fire from '../Fire';
+import { Brain } from '../Crainium';
 import BaseModal from './BaseModal';
 
 const style = StyleSheet.create({
@@ -13,7 +13,6 @@ const style = StyleSheet.create({
     padding: 10,
     width: '90%',
     height: 50,
-    marginBottom: 10,
     marginRight: 'auto',
     marginLeft: 'auto',
     borderRadius: 6,
@@ -79,7 +78,7 @@ PasswordResetModal.propTypes = {
 };
 
 PasswordResetModal.defaultProps = {
-  handleReset: Fire.resetPasswordHandler,
+  handleReset: Brain.resetPasswordHandler,
   openBtnStyle: {},
 };
 
