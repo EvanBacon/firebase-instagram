@@ -1,9 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import uuid from 'uuid';
-
+import config from './config';
 import getUserInfo from './utils/getUserInfo';
 import shrinkImageAsync from './utils/shrinkImageAsync';
 import uploadPhoto from './utils/uploadPhoto';
-import config from './config';
 
 const firebase = require('firebase');
 // Required for side-effects
@@ -11,47 +11,41 @@ require('firebase/firestore');
 
 const collectionName = 'snack-SJucFknGX';
 
-class FireStarter {
+class Crainium {
   constructor() {
     firebase.initializeApp(config);
   }
 
-  resetPasswordHandler = async email => {
-		const auth = firebase.auth();
+  listenClosely = () => {
+    return firebase.auth().onAuthStateChanged(async (user) =>{
+      if (user) {
+        // User is signed in.
+       const test = await this.getAccountInfo()
+       console.log(test);
+      } else {
+        // No user is signed in.
+      }
+    });
+  }
 
-		if ( null === email || 'undefined' === typeof email || ! email ) {
-			return false;
-		}
+  resetPasswordHandler = async (email) => {
+    const auth = firebase.auth();
 
-		return auth
-			.sendPasswordResetEmail(email)
-			.then(function() {
-        return true;
-			})
-			.catch(function() {
-			  return false;
-			});
-	  }
-
-  signIn = async ({ email, password }) => {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
-    .catch(function() {
-      // Handle Errors here.
-      // Maybe log these with sentri
-      // var errorCode = error.code;
-      // var errorMessage = error.message;
-      // ...
+    if (email === null || typeof email === 'undefined' || !email) {
       return false;
-    });
+    }
+
+    return auth
+      .sendPasswordResetEmail(email)
+      .then(() => true)
+      .catch(() => false);
   }
 
-  signOut = () => {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-    }).catch(function({ message }) {
-      console.log(message);
-    });
-  }
+  signIn = async ({ email, password }) => firebase.auth()
+    .signInWithEmailAndPassword(email, password)
+    .catch(() => false);
+
+  signOut = () => firebase.auth().signOut().then(() => true).catch(() => false);
 
   createUser = async ({
     email,
@@ -59,10 +53,8 @@ class FireStarter {
     firstName = '',
     lastName = '',
     username = '',
-  }) => {
-    return firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(({user}) => {
-
+  }) => firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(({ user }) => {
       // Get user id in callback store in database
       const userID = user.uid;
       // Store users meta data
@@ -73,7 +65,7 @@ class FireStarter {
         username,
         following: [],
         followers: [],
-        profilePictureUrl: "",
+        profilePictureUrl: '',
         activityStatus: true,
         accountPrivate: false,
         mutedAccounts: [],
@@ -89,38 +81,32 @@ class FireStarter {
         allowEmailNotifications: true,
         allowTextMessageNotifications: true,
         requestedVerification: false,
-      }
+      };
 
       this.userCollection.doc(userID).set(userData);
 
       this.activityCollection.doc(userID).set({ posts: [] });
 
       this.postsCollection.doc(userID).set({ posts: [] });
-
     })
-    .catch(function({ message, code }) {
-      return { status: 'error', message, code };
-    });
+    .catch(({ message, code }) => ({ status: 'error', message, code }))
 
-  }
-
-  checkIfUsernameExists = async username => {
-    let ref = this.userCollection.where( 'username', '==', username )
-      try {
-        const querySnapshot = await ref.get();
-        // No matches found.
-        if ( querySnapshot.empty ) {
-          return false;
-        }
-        // User found with username
-        return true;
-  
-      } catch({ message }) {
-        return {
-          status: 'error',
-          message: message,
-        }
+  checkIfUsernameExists = async (username) => {
+    const ref = this.userCollection.where('username', '==', username);
+    try {
+      const querySnapshot = await ref.get();
+      // No matches found.
+      if (querySnapshot.empty) {
+        return false;
       }
+      // User found with username
+      return true;
+    } catch ({ message }) {
+      return {
+        status: 'error',
+        message,
+      };
+    }
   }
 
   // Download Data
@@ -133,7 +119,7 @@ class FireStarter {
 
       const querySnapshot = await ref.get();
       const data = [];
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach((doc) => {
         if (doc.exists) {
           const post = doc.data() || {};
 
@@ -152,13 +138,13 @@ class FireStarter {
 
       const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
       return { data, cursor: lastVisible };
-    } catch ({ message }) {
-      alert(message);
+    } catch (error) {
+      return false;
     }
   };
 
   // Upload Data
-  uploadPhotoAsync = async uri => {
+  uploadPhotoAsync = async (uri) => {
     const path = `${collectionName}/${this.uid}/${uuid.v4()}.jpg`;
     return uploadPhoto(uri, path);
   };
@@ -170,7 +156,7 @@ class FireStarter {
       );
 
       const remoteUri = await this.uploadPhotoAsync(reducedImage);
-      this.collection.add({
+      return this.collection.add({
         text,
         uid: this.uid,
         timestamp: this.timestamp,
@@ -179,15 +165,40 @@ class FireStarter {
         image: remoteUri,
         user: getUserInfo(),
       });
-    } catch ({ message }) {
-      alert(message);
+    } catch (error) {
+      return false;
     }
   };
+
+  getAccountInfo = async () => {
+    let ref = this.userCollection.doc( this.uid );
+    try {
+      const doc = await ref.get();
+
+      if ( doc.exists ) {
+        return {
+          status: 'success',
+          accountInfo: doc.data(),
+        }
+      }
+
+      return {
+        status: 'fail',
+        message: 'User not found.',
+      }
+    
+    } catch ({ message }) {
+      return {
+        status: 'error',
+        message,
+      };
+    }
+  }
 
 
   // Helpers
   get loggedIn() {
-    return firebase.auth().currentUser ? true : false;
+    return !firebase.auth().currentUser;
   }
 
   get collection() {
@@ -209,11 +220,10 @@ class FireStarter {
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }
+
   get timestamp() {
     return Date.now();
   }
 }
 
-const Fire = new FireStarter();
-
-export default Fire;
+export const Brain = new Crainium();
