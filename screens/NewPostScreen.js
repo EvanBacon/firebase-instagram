@@ -3,9 +3,9 @@ import React from 'react';
 import { Image, TextInput, View } from 'react-native';
 import HeaderButtons from 'react-navigation-header-buttons';
 
-import Fire from '../Fire';
+import { Brain } from '../Crainium';
 
-export default class NewPostScreen extends React.Component<Props> {
+export default class NewPostScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Post',
     headerRight: (
@@ -17,7 +17,7 @@ export default class NewPostScreen extends React.Component<Props> {
             const image = navigation.getParam('image');
             if (text && image) {
               navigation.goBack();
-              Fire.post({ text: text.trim(), image });
+              Brain.post({ text: text.trim(), image });
             } else {
               alert('Need valid description');
             }
