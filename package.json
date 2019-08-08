@@ -6,9 +6,16 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start"
+    "start": "expo start",
+    "eslint": "./node_modules/.bin/eslint"
   },
   "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@expo/vector-icons": "^10.0.3",
+    "@firebase/app-types": "^0.4.3",
+    "@firebase/util": "^0.2.24",
+    "@types/markerclustererplus": "^2.1.33",
+    "@types/react": "^16.8.24",
     "expo": "^34.0.1",
     "expo-constants": "^6.0.0",
     "expo-image-manipulator": "^6.0.0",
@@ -23,12 +30,14 @@
     "react-native-screens": "1.0.0-alpha.22",
     "react-navigation": "^3.11.1",
     "react-navigation-header-buttons": "^1.2.1",
-    "@babel/core": "^7.5.5",
-    "@firebase/app-types": "^0.4.3",
-    "@firebase/util": "^0.2.24",
-    "@types/markerclustererplus": "^2.1.33",
-    "@types/react": "^16.8.24",
     "uuid": "3.3.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3"
+  }
 }
