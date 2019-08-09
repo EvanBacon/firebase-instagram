@@ -3,7 +3,7 @@ import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 
 const numColumns = 3;
 
-let placeholder = Array.apply(null, Array(20)).map((v, i) => {
+let placeholder = Array.apply(null, Array(60)).map((v, i) => {
   return { id: i, src: 'http://placehold.it/200x200?text='+(i+1),  }
 });
 
