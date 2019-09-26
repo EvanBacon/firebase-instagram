@@ -1,4 +1,4 @@
-import { ImageManipulator } from 'expo';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 function reduceImageAsync(uri) {
   return ImageManipulator.manipulate(uri, [{ resize: { width: 500 } }], {
