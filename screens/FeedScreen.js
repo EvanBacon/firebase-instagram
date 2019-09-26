@@ -1,18 +1,18 @@
-import firebase from 'firebase';
-import React, { Component } from 'react';
-import { LayoutAnimation, RefreshControl } from 'react-native';
+import firebase from "firebase";
+import React, { Component } from "react";
+import { LayoutAnimation, RefreshControl } from "react-native";
 
-import List from '../components/List';
-import Fire from '../Fire';
+import List from "../components/List";
+import Fire from "../Fire";
 
 // Set the default number of images to load for each pagination.
 const PAGE_SIZE = 5;
-
+console.disableYellowBox = true;
 export default class FeedScreen extends Component {
   state = {
     loading: false,
     posts: [],
-    data: {},
+    data: {}
   };
 
   componentDidMount() {
@@ -35,12 +35,12 @@ export default class FeedScreen extends Component {
     this.setState(previousState => {
       let data = {
         ...previousState.data,
-        ...posts,
+        ...posts
       };
       return {
         data,
         // Sort the data by timestamp
-        posts: Object.values(data).sort((a, b) => a.timestamp < b.timestamp),
+        posts: Object.values(data).sort((a, b) => a.timestamp < b.timestamp)
       };
     });
   };
@@ -56,7 +56,7 @@ export default class FeedScreen extends Component {
     // The data prop will be an array of posts, the cursor will be used for pagination.
     const { data, cursor } = await Fire.shared.getPaged({
       size: PAGE_SIZE,
-      start: lastKey,
+      start: lastKey
     });
 
     this.lastKnownKey = cursor;

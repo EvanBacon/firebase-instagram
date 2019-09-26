@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 const profileImageSize = 36;
 const padding = 12;
@@ -31,9 +31,9 @@ export default class Item extends React.Component {
         <Image
           resizeMode="contain"
           style={{
-            backgroundColor: '#D8D8D8',
-            width: '100%',
-            aspectRatio: aspect,
+            backgroundColor: "#D8D8D8",
+            width: "100%",
+            aspectRatio: aspect
           }}
           source={{ uri: image }}
         />
@@ -69,35 +69,35 @@ const IconBar = () => (
   <View style={styles.row}>
     <View style={styles.row}>
       <Icon name="ios-heart-empty" />
-      <Icon name="ios-chatbubbles-outline" />
-      <Icon name="ios-send-outline" />
+      <Icon name="ios-chatbubbles" />
+      <Icon name="ios-send"/>
     </View>
-    <Icon name="ios-bookmark-outline" />
+    <Icon name="ios-bookmark" />
   </View>
 );
 
 const styles = StyleSheet.create({
-  text: { fontWeight: '600' },
+  text: { fontWeight: "600" },
   subtitle: {
-    opacity: 0.8,
+    opacity: 0.8
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   padding: {
-    padding,
+    padding
   },
   avatar: {
     aspectRatio: 1,
-    backgroundColor: '#D8D8D8',
+    backgroundColor: "#D8D8D8",
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#979797',
+    borderColor: "#979797",
     borderRadius: profileImageSize / 2,
     width: profileImageSize,
     height: profileImageSize,
-    resizeMode: 'cover',
-    marginRight: padding,
-  },
+    resizeMode: "cover",
+    marginRight: padding
+  }
 });
