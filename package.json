@@ -6,10 +6,14 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
-    "expo": "^30.0.0",
+    "expo": "^35.0.0",
+    "expo-constants": "~7.0.0",
+    "expo-image-manipulator": "~7.0.0",
+    "expo-image-picker": "~7.0.0",
+    "expo-permissions": "~7.0.0",
     "firebase": "5.2.0",
-    "react": "16.4.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-navigation": "2.6.0",
     "react-navigation-header-buttons": "^1.2.1",
     "uuid": "3.3.2"
