@@ -21,7 +21,7 @@ class Fire {
       messagingSenderId: '716190466061',
     });
     // Some nonsense...
-    firebase.firestore().settings({ timestampsInSnapshots: true });
+
 
     // Listen for auth
     firebase.auth().onAuthStateChanged(async user => {
